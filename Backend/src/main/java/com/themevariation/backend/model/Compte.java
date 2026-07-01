@@ -4,27 +4,32 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "evenements")
-public class Evenement {
+@Table(name = "comptes")
+public class Compte {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String titre;
-    
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private LocalDateTime dateHeure;
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Column(nullable = false)
-    private String lieu;
+    private String motDePasse;
+
+    @Column(nullable = false)
+    private String nom;
+
+    @Column(nullable = false)
+    private String prenom;
+
+    private String telephone;
+
+    @Column(nullable = false)
+    private String role;
 }

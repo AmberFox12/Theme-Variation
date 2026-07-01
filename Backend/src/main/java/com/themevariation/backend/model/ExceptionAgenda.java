@@ -1,34 +1,36 @@
 package com.themevariation.backend.model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "billets")
-public class Billet {
+@Table(name = "exceptions_agenda")
+public class ExceptionAgenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "compte_id", nullable = false)
-    private Compte compte;
+    @JoinColumn(name = "cours_id", nullable = false)
+    private Cours cours;
 
     @ManyToOne
     @JoinColumn(name = "evenement_id", nullable = false)
     private Evenement evenement;
 
-    @Column(nullable = false)
-    private String statut; // ex : "RESERVE", "PAYE", "ANNULE"
+    private LocalDate dateDebut;
+
+    private LocalDate dateFin;
 
     @Column(nullable = false)
-    private String reference; // ex : nom/numéro de la palce
+    private String type; // ex : "ANNULATION, VACANCES", ...
+
+    private String description;
 }

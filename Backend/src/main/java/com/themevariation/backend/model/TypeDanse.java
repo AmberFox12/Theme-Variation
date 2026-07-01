@@ -4,18 +4,22 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "inscriptions")
-public class Inscription {
+@Table(name = "types_danse")
+public class TypeDanse {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Tes champs ici
+    @Column(nullable = false)
+    private String nom;
+
+    private String description;
+
+    private int ageMinimum;
 }

@@ -1,1 +1,16 @@
-<p>Agenda — à construire</p>
+<div class="agenda">
+  <h1>Agenda</h1>
+
+    @if (evenements().length === 0) {
+    <p>Aucun événement à venir.</p>
+    } @else {
+        @for (evenement of evenements(); track evenement.id) {
+            <div class="evenement-card">
+                <h2>{{ evenement.titre }}</h2>
+                <p>{{ evenement.dateHeure | date:'dd/MM/yyyy à HH:mm' }}</p>
+                <p><strong>Lieu :</strong> {{ evenement.lieu }}</p>
+                <p>{{ evenement.description }}</p>
+            </div>
+        }
+    }
+</div>

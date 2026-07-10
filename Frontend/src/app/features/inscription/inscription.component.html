@@ -1,1 +1,39 @@
-<p>Inscription — à construire</p>
+<div class="inscription">
+  <h1>Inscription</h1>
+
+  @if (successMessage()) {
+    <p class="success">{{ successMessage() }}</p>
+  }
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="nom">Nom *</label>
+      <input id="nom" type="text" formControlName="nom" />
+    </div>
+
+    <div class="form-group">
+      <label for="prenom">Prénom *</label>
+      <input id="prenom" type="text" formControlName="prenom" />
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input id="email" type="email" formControlName="email" />
+    </div>
+
+    <div class="form-group">
+      <label for="motDePasse">Mot de passe * (6 caractères minimum)</label>
+      <input id="motDePasse" type="password" formControlName="motDePasse" />
+    </div>
+
+    <div class="form-group">
+      <label for="telephone">Téléphone</label>
+      <input id="telephone" type="tel" formControlName="telephone" />
+    </div>
+
+    <button type="submit" [disabled]="formStatus() !== 'VALID'">S'inscrire</button>
+  </form>
+</div>

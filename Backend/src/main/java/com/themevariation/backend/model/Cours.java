@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Getter
@@ -29,6 +29,7 @@ public class Cours {
     @Column(nullable = false)
     private String jour;
 
+    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime heureDebut;
 
     private int dureeMinutes;

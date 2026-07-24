@@ -9,11 +9,13 @@ import { AgendaAdminComponent } from './features/admin/agenda-admin/agenda-admin
 import { InscritsAdminComponent } from './features/admin/inscrits-admin/inscrits-admin.component';
 import { BilletterieAdminComponent } from './features/admin/billetterie-admin/billetterie-admin.component';
 import { AgendaComponent } from './features/agenda/agenda.component';
+import { PlanningComponent } from './features/planning/planning.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
     { path: 'billetterie', component: BilletterieComponent},
     { path: 'agenda', component: AgendaComponent},
+    { path: 'planning', component: PlanningComponent},
     { path: 'inscription', component: InscriptionComponent},
     { path: 'login', component: LoginComponent},
     { 
@@ -23,6 +25,7 @@ export const routes: Routes = [
         children:[
             { path: '', redirectTo: 'agenda', pathMatch: 'full'},
             { path: 'agenda', component: AgendaAdminComponent},
+            { path: 'planning', component: PlanningComponent},
             { path: 'billeterie', component: BilletterieAdminComponent},
             { path: 'inscrits', component: InscritsAdminComponent}
         ]

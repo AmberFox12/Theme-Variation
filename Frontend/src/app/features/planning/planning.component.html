@@ -1,0 +1,31 @@
+<div class="planning">
+  <h1>Planning des cours</h1>
+
+  <div class="grille">
+    <div class="colonne-heures">
+      <div class="entete-vide"></div>
+      @for (heure of heures; track heure) {
+        <div class="label-heure">{{ heure }}</div>
+      }
+    </div>
+
+    @for (jour of jours; track jour) {
+      <div class="colonne-jour">
+        <div class="entete-jour">{{ jour }}</div>
+        <div class="corps-jour">
+          @for (c of getCoursParJour(jour); track c.id) {
+            <div
+              class="bloc-cours"
+              [style.top.px]="getTop(c.heureDebut)"
+              [style.height.px]="getHauteur(c.dureeMinutes)"
+            >
+              <strong>{{ c.typeDanse.nom }}</strong>
+              <span>{{ c.heureDebut.slice(0, 5) }}</span>
+              <span>{{ c.dureeMinutes }} min · {{ c.placesDisponibles }} places</span>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

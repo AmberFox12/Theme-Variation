@@ -11,6 +11,6 @@ public class RegisterRequest {
     private String email;
     private String motDePasse;
     private String nom;
-    private String prénom;
-    private String téléphone;
+    private String prenom;
+    private String telephone;
 }

@@ -1,1 +1,21 @@
-<p>Connexion admin — à construire</p>
+<div class="login">
+  <h1>Connexion</h1>
+
+  @if (errorMessage()) {
+    <p class="error">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" />
+    </div>
+
+    <div class="form-group">
+      <label for="motDePasse">Mot de passe</label>
+      <input id="motDePasse" type="password" formControlName="motDePasse" />
+    </div>
+
+    <button type="submit" [disabled]="formStatus() !== 'VALID'">Se connecter</button>
+  </form>
+</div>

@@ -45,6 +45,7 @@ public class JwtUtil {
             getClaims(token);
             return true;
         } catch (Exception e) {
+            System.err.println("JWT invalide : " + e.getClass().getSimpleName() + " — " + e.getMessage());
             return false;
         }
     }

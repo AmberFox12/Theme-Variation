@@ -1,5 +1,6 @@
 package com.themevariation.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Compte {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String motDePasse;
 
@@ -29,6 +31,8 @@ public class Compte {
     private String prenom;
 
     private String telephone;
+
+    private String adresse;
 
     @Column(nullable = false)
     private String role;

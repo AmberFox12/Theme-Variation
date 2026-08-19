@@ -17,5 +17,17 @@ public class Inscription {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Tes champs ici
+    @ManyToOne
+    @JoinColumn(name = "eleve_id", nullable = false)
+    private Eleve eleve;
+
+    @ManyToOne
+    @JoinColumn(name = "cours_id", nullable = false)
+    private Cours cours;
+
+    @Column(nullable = false)
+    private String statut; // EN_COURS, PAYE, IMPAYE, TERMINE
+
+    @Column(nullable = false)
+    private LocalDateTime dateInscription;
 }

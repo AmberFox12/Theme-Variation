@@ -18,8 +18,8 @@ public class Eleve {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "compte_id", nullable = false)
-    private Compte compte;
+    @JoinColumn(name = "compte_id")
+    private Compte compte; // optionnel — peut être null si pas de compte en ligne
 
     @Column(nullable = false)
     private String nom;
@@ -28,4 +28,8 @@ public class Eleve {
     private String prenom;
 
     private LocalDate dateNaissance;
+
+    private String email;
+
+    private String telephone;
 }

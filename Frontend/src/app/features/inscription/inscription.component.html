@@ -1,39 +1,185 @@
-<div class="inscription">
-  <h1>Inscription</h1>
-
-  @if (successMessage()) {
-    <p class="success">{{ successMessage() }}</p>
-  }
-  @if (errorMessage()) {
-    <p class="error">{{ errorMessage() }}</p>
-  }
-
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="nom">Nom *</label>
-      <input id="nom" type="text" formControlName="nom" />
+<!-- CONFIRMATION -->
+@if (succes()) {
+  <div class="confirmation">
+    <div class="confirmation-contenu">
+      <div class="confirmation-icone">✓</div>
+      <h2>Demande envoyée !</h2>
+      <p>
+        Votre demande d'inscription a bien été reçue.<br>
+        L'association vous contactera prochainement pour finaliser votre inscription et les modalités de paiement.
+      </p>
+      <p class="confirmation-contact">
+        Une question ? Contactez-nous au <strong>07.65.23.31.96</strong>
+        ou à <strong>association.themeetvariations&#64;gmail.com</strong>
+      </p>
     </div>
+  </div>
+}
 
-    <div class="form-group">
-      <label for="prenom">Prénom *</label>
-      <input id="prenom" type="text" formControlName="prenom" />
-    </div>
+<!-- FORMULAIRE -->
+@if (!succes()) {
+<div class="page-inscription">
+  <div class="page-header">
+    <p class="page-surtitre">Association Thème et Variations</p>
+    <h1>Inscription 2026-2027</h1>
+    <p class="page-accroche">Remplissez ce formulaire pour inscrire vos élèves. L'association vous contactera pour confirmer les inscriptions et organiser le règlement.</p>
+  </div>
 
-    <div class="form-group">
-      <label for="email">Email *</label>
-      <input id="email" type="email" formControlName="email" />
-    </div>
+  <div class="container">
+    <form [formGroup]="form" (ngSubmit)="soumettre()" novalidate>
 
-    <div class="form-group">
-      <label for="motDePasse">Mot de passe * (6 caractères minimum)</label>
-      <input id="motDePasse" type="password" formControlName="motDePasse" />
-    </div>
+      <!-- SECTION 1 : RESPONSABLE -->
+      <section class="form-section">
+        <h2 class="section-titre">
+          <span class="section-num">1</span>
+          Coordonnées du responsable
+        </h2>
+        <p class="section-desc">Adhérent ou représentant légal de l'élève mineur</p>
 
-    <div class="form-group">
-      <label for="telephone">Téléphone</label>
-      <input id="telephone" type="tel" formControlName="telephone" />
-    </div>
+        <div class="champs-grille">
+          <div class="champ">
+            <label for="nom">Nom <span class="requis">*</span></label>
+            <input id="nom" type="text" formControlName="nom"
+                   [class.invalide]="form.get('nom')?.invalid && form.get('nom')?.touched" />
+            @if (form.get('nom')?.invalid && form.get('nom')?.touched) {
+              <span class="erreur-champ">Champ requis</span>
+            }
+          </div>
 
-    <button type="submit" [disabled]="formStatus() !== 'VALID'">S'inscrire</button>
-  </form>
+          <div class="champ">
+            <label for="prenom">Prénom <span class="requis">*</span></label>
+            <input id="prenom" type="text" formControlName="prenom"
+                   [class.invalide]="form.get('prenom')?.invalid && form.get('prenom')?.touched" />
+            @if (form.get('prenom')?.invalid && form.get('prenom')?.touched) {
+              <span class="erreur-champ">Champ requis</span>
+            }
+          </div>
+
+          <div class="champ">
+            <label for="email">Email <span class="requis">*</span></label>
+            <input id="email" type="email" formControlName="email"
+                   [class.invalide]="form.get('email')?.invalid && form.get('email')?.touched" />
+            @if (form.get('email')?.errors?.['required'] && form.get('email')?.touched) {
+              <span class="erreur-champ">Champ requis</span>
+            }
+            @if (form.get('email')?.errors?.['email'] && form.get('email')?.touched) {
+              <span class="erreur-champ">Email invalide</span>
+            }
+          </div>
+
+          <div class="champ">
+            <label for="telephone">Téléphone <span class="requis">*</span></label>
+            <input id="telephone" type="tel" formControlName="telephone"
+                   [class.invalide]="form.get('telephone')?.invalid && form.get('telephone')?.touched" />
+            @if (form.get('telephone')?.invalid && form.get('telephone')?.touched) {
+              <span class="erreur-champ">Champ requis</span>
+            }
+          </div>
+
+          <div class="champ champ-pleine-largeur">
+            <label for="adresse">Adresse</label>
+            <input id="adresse" type="text" formControlName="adresse"
+                   placeholder="Rue, code postal, ville" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 : ÉLÈVES -->
+      <section class="form-section">
+        <h2 class="section-titre">
+          <span class="section-num">2</span>
+          Élève(s) à inscrire
+        </h2>
+        <p class="section-desc">Ajoutez un élève par personne à inscrire, puis sélectionnez les cours souhaités.</p>
+
+        <div formArrayName="eleves">
+          @for (ctrl of eleves.controls; track $index; let i = $index) {
+            <div class="eleve-card" [formGroupName]="i">
+              <div class="eleve-card-header">
+                <h3>Élève {{ i + 1 }}</h3>
+                @if (eleves.length > 1) {
+                  <button type="button" class="btn-supprimer" (click)="supprimerEleve(i)">
+                    Supprimer
+                  </button>
+                }
+              </div>
+
+              <div class="champs-grille">
+                <div class="champ">
+                  <label>Nom <span class="requis">*</span></label>
+                  <input type="text" formControlName="nom"
+                         [class.invalide]="eleveAsGroup(i).get('nom')?.invalid && eleveAsGroup(i).get('nom')?.touched" />
+                  @if (eleveAsGroup(i).get('nom')?.invalid && eleveAsGroup(i).get('nom')?.touched) {
+                    <span class="erreur-champ">Champ requis</span>
+                  }
+                </div>
+
+                <div class="champ">
+                  <label>Prénom <span class="requis">*</span></label>
+                  <input type="text" formControlName="prenom"
+                         [class.invalide]="eleveAsGroup(i).get('prenom')?.invalid && eleveAsGroup(i).get('prenom')?.touched" />
+                  @if (eleveAsGroup(i).get('prenom')?.invalid && eleveAsGroup(i).get('prenom')?.touched) {
+                    <span class="erreur-champ">Champ requis</span>
+                  }
+                </div>
+
+                <div class="champ">
+                  <label>Date de naissance</label>
+                  <input type="date" formControlName="dateNaissance" />
+                </div>
+              </div>
+
+              <!-- COURS -->
+              @if (coursByType().length > 0) {
+                <div class="cours-selection">
+                  <p class="cours-selection-titre">Cours souhaités</p>
+                  <div class="cours-groupes">
+                    @for (groupe of coursByType(); track groupe.type) {
+                      <div class="cours-groupe">
+                        <h4 class="cours-groupe-titre">{{ groupe.type }}</h4>
+                        @for (c of groupe.cours; track c.id) {
+                          <label class="cours-label" [class.selectionne]="isCoursSelected(i, c.id)">
+                            <input type="checkbox"
+                                   [checked]="isCoursSelected(i, c.id)"
+                                   (change)="toggleCours(i, c.id)" />
+                            <span class="cours-info">
+                              <strong>{{ c.nom }}</strong>
+                              <small>{{ c.jour }} · {{ c.heureDebut }} · {{ c.dureeMinutes }} min</small>
+                            </span>
+                          </label>
+                        }
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
+        <button type="button" class="btn-ajouter-eleve" (click)="ajouterEleve()">
+          + Ajouter un élève
+        </button>
+      </section>
+
+      <!-- SECTION 3 : ENVOI -->
+      <section class="form-section form-section-envoi">
+        <p class="mention-legale">
+          Les informations recueillies font l'objet d'un traitement informatique dans le cadre de la gestion des adhésions
+          de l'association Thème et Variations. Elles ne sont pas transmises à des tiers.
+        </p>
+
+        @if (erreurMessage()) {
+          <div class="erreur-globale">{{ erreurMessage() }}</div>
+        }
+
+        <button type="submit" class="btn-soumettre" [disabled]="enCours()">
+          @if (enCours()) { Envoi en cours… }
+          @else { Envoyer ma demande d'inscription }
+        </button>
+      </section>
+
+    </form>
+  </div>
 </div>
+}

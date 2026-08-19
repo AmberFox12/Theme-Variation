@@ -1,0 +1,344 @@
+$bordeaux:       #7C1F35;
+$bordeaux-fonce: #521526;
+$accent:         #C94A25;
+$bg-clair:       #FDF8F7;
+$bg-alt:         #F3E8EA;
+$texte:          #1A1A1A;
+$texte-moyen:    #5a5a5a;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section { padding: 80px 0; }
+
+.section-titre {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: $bordeaux;
+  margin: 0 0 12px;
+}
+
+.section-sous-titre {
+  text-align: center;
+  color: $texte-moyen;
+  font-size: 1.05rem;
+  margin: 0 0 48px;
+}
+
+.section-surtitre {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: $accent;
+  margin: 0 0 8px;
+}
+
+/* ── HERO ── */
+.hero {
+  background: $bordeaux-fonce;
+  color: #fff;
+  padding: 110px 2rem 100px;
+  text-align: center;
+
+  .hero-surtitre {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.82rem;
+    opacity: 0.7;
+    margin: 0 0 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    margin: 0 0 20px;
+  }
+
+  .hero-accroche {
+    font-size: 1.12rem;
+    opacity: 0.85;
+    max-width: 500px;
+    margin: 0 auto 40px;
+    line-height: 1.65;
+  }
+}
+
+.btn-hero {
+  display: inline-block;
+  background: $accent;
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1rem;
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover {
+    background: darken($accent, 10%);
+    transform: translateY(-2px);
+  }
+}
+
+/* ── NOS COURS ── */
+.cours {
+  background: $bg-clair;
+
+  .cours-grille {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 22px;
+  }
+
+  .cours-carte {
+    background: #fff;
+    border-radius: 12px;
+    padding: 26px 22px;
+    border: 1px solid #e5d0d4;
+    transition: box-shadow 0.2s, transform 0.2s;
+
+    &:hover {
+      box-shadow: 0 6px 24px rgba(124, 31, 53, 0.12);
+      transform: translateY(-2px);
+    }
+
+    .cours-icone {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $bordeaux;
+      margin: 0 0 10px;
+    }
+
+    p {
+      font-size: 0.86rem;
+      color: $texte-moyen;
+      line-height: 1.55;
+      margin: 0 0 14px;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        font-size: 0.82rem;
+        color: $texte-moyen;
+        padding: 4px 0;
+        border-bottom: 1px solid #f0e4e6;
+
+        &:last-child { border-bottom: none; }
+        &::before { content: '– '; color: $accent; }
+      }
+    }
+  }
+}
+
+/* ── PROFESSEURE ── */
+.professeure {
+  background: #fff;
+
+  .professeure-contenu {
+    display: flex;
+    gap: 64px;
+    align-items: center;
+
+    @media (max-width: 700px) {
+      flex-direction: column;
+      gap: 36px;
+      text-align: center;
+    }
+  }
+
+  .professeure-photo {
+    flex-shrink: 0;
+
+    .photo-placeholder {
+      width: 260px;
+      height: 320px;
+      background: $bg-alt;
+      border-radius: 14px;
+      border: 2px dashed #c8a0a8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a08088;
+      font-size: 0.9rem;
+    }
+  }
+
+  .professeure-texte {
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: $bordeaux;
+      margin: 0 0 20px;
+    }
+
+    .bio {
+      line-height: 1.75;
+      color: $texte-moyen;
+      font-style: italic;
+      font-size: 0.97rem;
+      margin: 0;
+    }
+  }
+}
+
+/* ── TARIFS ── */
+.tarifs {
+  background: $bg-alt;
+
+  .sous-section {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $bordeaux;
+    margin: 40px 0 16px;
+
+    &:first-of-type { margin-top: 0; }
+  }
+
+  .tableau-wrapper { overflow-x: auto; }
+
+  .tableau-tarifs {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 12px rgba(124, 31, 53, 0.08);
+
+    th {
+      background: $bordeaux;
+      color: #fff;
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 600;
+
+      small {
+        font-weight: 400;
+        opacity: 0.75;
+        font-size: 0.78rem;
+        display: block;
+        margin-top: 2px;
+      }
+    }
+
+    td {
+      padding: 12px 18px;
+      border-bottom: 1px solid #f0e5e7;
+      color: $texte;
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) td { background: $bg-clair; }
+  }
+
+  .tarif-simple {
+    color: $texte-moyen;
+    font-size: 0.95rem;
+    margin: 0 0 8px;
+  }
+
+  .tarifs-extras {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  .tarif-extra {
+    background: #fff;
+    padding: 20px 22px;
+    border-radius: 10px;
+    border-left: 4px solid $bordeaux;
+    box-shadow: 0 1px 6px rgba(124, 31, 53, 0.06);
+
+    h4 {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: $bordeaux;
+      margin: 0 0 10px;
+    }
+
+    p {
+      font-size: 0.88rem;
+      color: $texte-moyen;
+      line-height: 1.6;
+      margin: 0;
+
+      strong { color: $texte; }
+      small { font-size: 0.8rem; display: block; margin-top: 4px; color: #999; }
+    }
+  }
+}
+
+/* ── CONTACT ── */
+.contact {
+  background: $bordeaux-fonce;
+  color: #fff;
+
+  .contact-contenu {
+    display: flex;
+    gap: 80px;
+    align-items: center;
+    justify-content: space-between;
+
+    @media (max-width: 700px) {
+      flex-direction: column;
+      gap: 48px;
+      text-align: center;
+    }
+  }
+
+  h2 {
+    font-size: 1.7rem;
+    font-weight: 800;
+    margin: 0 0 24px;
+  }
+
+  .contact-infos p {
+    margin: 0 0 14px;
+    line-height: 1.55;
+    opacity: 0.88;
+    font-size: 0.97rem;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+
+  .contact-cta {
+    text-align: center;
+
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+
+    p {
+      opacity: 0.75;
+      font-size: 0.95rem;
+      margin: 0 0 28px;
+    }
+  }
+}

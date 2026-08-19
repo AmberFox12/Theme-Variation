@@ -7,8 +7,15 @@
       </a>
     </li>
     <li><a routerLink="/agenda" routerLinkActive="active">Agenda</a></li>
-    <li><a routerLink="/planning" routerLinkActive="active">Planning</a></li>
-    <li><a routerLink="/billetterie" routerLinkActive="active">Billetterie</a></li>
     <li><a routerLink="/inscription" routerLinkActive="active">Inscription</a></li>
+
+    @if (authService.estConnecte()) {
+      @if (authService.role() === 'ADMIN') {
+        <li><a routerLink="/admin" routerLinkActive="active">Espace admin</a></li>
+      }
+      <li><a (click)="logout()" class="lien-action">Déconnexion</a></li>
+    } @else {
+      <li><a routerLink="/login" routerLinkActive="active">Connexion</a></li>
+    }
   </ul>
 </nav>

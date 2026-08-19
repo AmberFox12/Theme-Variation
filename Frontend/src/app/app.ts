@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map } from 'rxjs';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 @Component({
@@ -9,5 +11,13 @@ import { NavbarComponent } from './shared/components/navbar/navbar.component';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('theme-variation-front');
+  private router = inject(Router);
+
+  estSectionAdmin = toSignal(
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map(e => (e as NavigationEnd).url.startsWith('/admin'))
+    ),
+    { initialValue: this.router.url.startsWith('/admin') }
+  );
 }

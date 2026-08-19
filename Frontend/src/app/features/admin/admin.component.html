@@ -1,2 +1,31 @@
-<p>Espace admin — layout parent</p>
-<router-outlet />
+<div class="admin-layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span>Thème et Variations</span>
+      <small>Espace admin</small>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="planning" routerLinkActive="active">
+        <span class="icon">📋</span> Planning
+      </a>
+      <a routerLink="evenements" routerLinkActive="active">
+        <span class="icon">🎭</span> Événements
+      </a>
+      <a routerLink="inscrits" routerLinkActive="active">
+        <span class="icon">👥</span> Inscrits
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a routerLink="/" class="lien-site">← Voir le site</a>
+      <button (click)="logout()">Déconnexion</button>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <router-outlet />
+  </main>
+
+</div>

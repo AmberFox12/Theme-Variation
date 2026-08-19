@@ -1,2 +1,4 @@
-<app-navbar></app-navbar>
+@if (!estSectionAdmin()) {
+  <app-navbar />
+}
 <router-outlet />

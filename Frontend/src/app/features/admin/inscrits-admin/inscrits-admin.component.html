@@ -1,1 +1,127 @@
-<p>Admin — Gestion des inscrits</p>
+<div class="inscrits-admin">
+
+  <div class="page-entete">
+    <h1>Inscrits</h1>
+    <button class="btn-primaire" (click)="ouvrir()">+ Nouvelle inscription</button>
+  </div>
+
+  <div class="contenu" [class.avec-panneau]="panneauOuvert()">
+
+    <div class="tableau-wrapper">
+      @if (inscriptions().length === 0) {
+        <p class="vide">Aucune inscription enregistrée.</p>
+      } @else {
+        <table class="tableau">
+          <thead>
+            <tr>
+              <th>Élève</th>
+              <th>Contact</th>
+              <th>Cours</th>
+              <th>Jour / Heure</th>
+              <th>Statut</th>
+              <th>Date d'inscription</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (i of inscriptions(); track i.id) {
+              <tr>
+                <td class="nom-eleve">{{ i.eleve.prenom }} {{ i.eleve.nom }}</td>
+                <td class="contact">
+                  @if (i.eleve.email) { <span>{{ i.eleve.email }}</span> }
+                  @if (i.eleve.telephone) { <span class="tel">{{ i.eleve.telephone }}</span> }
+                </td>
+                <td>{{ i.cours.nom }}</td>
+                <td class="horaire">{{ i.cours.jour }} {{ i.cours.heureDebut | slice:0:5 }}</td>
+                <td>
+                  <select class="select-statut" [class]="'statut-' + i.statut.toLowerCase()"
+                          [value]="i.statut"
+                          (change)="changerStatut(i, $any($event.target).value)">
+                    @for (s of STATUTS; track s) {
+                      <option [value]="s" [selected]="s === i.statut">{{ labelStatut(s) }}</option>
+                    }
+                  </select>
+                </td>
+                <td class="date">{{ i.dateInscription | date:'dd/MM/yyyy' }}</td>
+                <td>
+                  <button class="btn-delete" (click)="supprimer(i)">🗑️</button>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+    </div>
+
+    @if (panneauOuvert()) {
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h2>Nouvelle inscription</h2>
+          <button class="btn-fermer" (click)="fermer()">✕</button>
+        </div>
+
+        <form [formGroup]="formInscription" (ngSubmit)="sauvegarder()" class="formulaire">
+
+          <label>Cours
+            <select formControlName="coursId">
+              <option [value]="null" disabled>— Choisir un cours —</option>
+              @for (c of cours(); track c.id) {
+                <option [value]="c.id">{{ c.nom }} — {{ c.jour }} {{ c.heureDebut | slice:0:5 }}</option>
+              }
+            </select>
+          </label>
+
+          <label>Statut initial
+            <select formControlName="statut">
+              @for (s of STATUTS; track s) {
+                <option [value]="s">{{ labelStatut(s) }}</option>
+              }
+            </select>
+          </label>
+
+          <div class="section-eleve">
+            <div class="section-eleve-entete">
+              <span>Élève</span>
+              <button type="button" class="btn-lien" (click)="modeNouvelEleve.set(!modeNouvelEleve())">
+                {{ modeNouvelEleve() ? '← Choisir existant' : '+ Nouvel élève' }}
+              </button>
+            </div>
+
+            @if (modeNouvelEleve()) {
+              <div class="sous-formulaire" [formGroup]="formEleve">
+                <label>Prénom <input type="text" formControlName="prenom" /></label>
+                <label>Nom <input type="text" formControlName="nom" /></label>
+                <label>Email <input type="email" formControlName="email" /></label>
+                <label>Téléphone <input type="tel" formControlName="telephone" /></label>
+                <label>Date de naissance <input type="date" formControlName="dateNaissance" /></label>
+                <button type="button" class="btn-secondaire"
+                        [disabled]="formEleveStatus() !== 'VALID'"
+                        (click)="creerEleve()">
+                  Créer et sélectionner
+                </button>
+              </div>
+            } @else {
+              <label>
+                <select formControlName="eleveId">
+                  <option [value]="null" disabled>— Choisir un élève —</option>
+                  @for (e of eleves(); track e.id) {
+                    <option [value]="e.id">{{ e.prenom }} {{ e.nom }}</option>
+                  }
+                </select>
+              </label>
+            }
+          </div>
+
+          <div class="panneau-actions">
+            <button type="button" class="btn-secondaire" (click)="fermer()">Annuler</button>
+            <button type="submit" class="btn-primaire" [disabled]="formStatus() !== 'VALID'">
+              Inscrire
+            </button>
+          </div>
+
+        </form>
+      </div>
+    }
+
+  </div>
+</div>

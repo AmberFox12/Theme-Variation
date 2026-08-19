@@ -1,0 +1,76 @@
+<div class="evenements-admin">
+
+  <div class="page-entete">
+    <h1>Événements</h1>
+    <button class="btn-primaire" (click)="ouvrirCreation()">+ Nouvel événement</button>
+  </div>
+
+  <div class="contenu" [class.avec-panneau]="panneauOuvert()">
+
+    <div class="liste">
+      @if (evenements().length === 0) {
+        <p class="vide">Aucun événement enregistré.</p>
+      }
+      @for (e of evenements(); track e.id) {
+        <div class="carte" [class.passe]="estPasse(e.dateHeure)">
+          <div class="carte-info">
+            <span class="badge" [class.badge-passe]="estPasse(e.dateHeure)">
+              {{ estPasse(e.dateHeure) ? 'Passé' : 'À venir' }}
+            </span>
+            <h2>{{ e.titre || '(sans titre)' }}</h2>
+            @if (e.dateHeure) {
+              <p class="date">📅 {{ e.dateHeure | date:'dd/MM/yyyy à HH:mm' }}</p>
+            }
+            @if (e.lieu) {
+              <p class="lieu">📍 {{ e.lieu }}</p>
+            }
+            @if (e.description) {
+              <p class="description">{{ e.description }}</p>
+            }
+          </div>
+          <div class="carte-actions">
+            <button class="btn-edit" (click)="ouvrirEdition(e)">✏️ Modifier</button>
+            <button class="btn-delete" (click)="supprimer(e)">🗑️ Supprimer</button>
+          </div>
+        </div>
+      }
+    </div>
+
+    @if (panneauOuvert()) {
+      <div class="panneau">
+        <div class="panneau-entete">
+          <h2>{{ labelBouton() === 'Enregistrer' ? 'Modifier l\'événement' : 'Nouvel événement' }}</h2>
+          <button class="btn-fermer" (click)="fermerPanneau()">✕</button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="sauvegarder()" class="formulaire">
+
+          <label>Titre
+            <input type="text" formControlName="titre" placeholder="ex : Spectacle de fin d'année" />
+          </label>
+
+          <label>Date et heure
+            <input type="datetime-local" formControlName="dateHeure" />
+          </label>
+
+          <label>Lieu
+            <input type="text" formControlName="lieu" placeholder="ex : Salle des fêtes de Verneuil" />
+          </label>
+
+          <label>Description
+            <textarea formControlName="description" rows="4" placeholder="Informations supplémentaires..."></textarea>
+          </label>
+
+          <div class="panneau-actions">
+            <button type="button" class="btn-secondaire" (click)="fermerPanneau()">Annuler</button>
+            <button type="submit" class="btn-primaire" [disabled]="formStatus() !== 'VALID'">
+              {{ labelBouton() }}
+            </button>
+          </div>
+
+        </form>
+      </div>
+    }
+
+  </div>
+</div>

@@ -12,10 +12,15 @@ import com.themevariation.backend.repository.CoursRepository;
 import com.themevariation.backend.repository.EleveRepository;
 import com.themevariation.backend.repository.InscriptionRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -27,15 +32,24 @@ public class InscriptionService {
     private final EleveRepository eleveRepository;
     private final CoursRepository coursRepository;
     private final CompteRepository compteRepository;
+    private final ParametreService parametreService;
+
+    @Autowired(required = false)
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username:}")
+    private String mailFrom;
 
     public InscriptionService(InscriptionRepository inscriptionRepository,
                               EleveRepository eleveRepository,
                               CoursRepository coursRepository,
-                              CompteRepository compteRepository) {
+                              CompteRepository compteRepository,
+                              ParametreService parametreService) {
         this.inscriptionRepository = inscriptionRepository;
         this.eleveRepository = eleveRepository;
         this.coursRepository = coursRepository;
         this.compteRepository = compteRepository;
+        this.parametreService = parametreService;
     }
 
     public List<Inscription> getAll() {
@@ -73,6 +87,7 @@ public class InscriptionService {
         compteRepository.save(compte);
 
         int nbInscriptions = 0;
+        List<String> resumeEleves = new ArrayList<>();
         List<ElevePubliqueDto> elevesDto = request.getEleves();
         if (elevesDto != null) {
             for (ElevePubliqueDto dto : elevesDto) {
@@ -85,10 +100,12 @@ public class InscriptionService {
                 }
                 eleveRepository.save(eleve);
 
+                List<String> nomsCours = new ArrayList<>();
                 if (dto.getCoursIds() != null) {
                     for (Long coursId : dto.getCoursIds()) {
                         Cours cours = coursRepository.findById(coursId)
                                 .orElseThrow(() -> new RuntimeException("Cours introuvable : " + coursId));
+                        nomsCours.add(cours.getNom());
                         Inscription inscription = new Inscription();
                         inscription.setEleve(eleve);
                         inscription.setCours(cours);
@@ -98,14 +115,42 @@ public class InscriptionService {
                         nbInscriptions++;
                     }
                 }
+                resumeEleves.add(dto.getPrenom() + " " + dto.getNom() + " → " + String.join(", ", nomsCours));
             }
         }
 
+        envoyerEmailInscription(request, resumeEleves);
         return Map.of(
                 "message", "Inscription enregistrée avec succès",
                 "nombreEleves", elevesDto != null ? elevesDto.size() : 0,
                 "nombreInscriptions", nbInscriptions
         );
+    }
+
+    private void envoyerEmailInscription(InscriptionPubliqueRequest request, List<String> eleves) {
+        try {
+            if (mailSender == null) return;
+            String dest = parametreService.get().getEmailNotification();
+            if (dest == null || dest.isBlank()) return;
+
+            StringBuilder corps = new StringBuilder();
+            corps.append("Nouvelle préinscription reçue\n\n");
+            corps.append("Responsable : ").append(request.getPrenom()).append(" ").append(request.getNom()).append("\n");
+            corps.append("Email : ").append(request.getEmail()).append("\n");
+            if (request.getTelephone() != null) corps.append("Téléphone : ").append(request.getTelephone()).append("\n");
+            if (request.getAdresse() != null) corps.append("Adresse : ").append(request.getAdresse()).append("\n");
+            corps.append("\nÉlèves inscrits :\n");
+            for (String e : eleves) corps.append("  - ").append(e).append("\n");
+
+            SimpleMailMessage mail = new SimpleMailMessage();
+            mail.setFrom(mailFrom);
+            mail.setTo(dest);
+            mail.setSubject("Nouvelle préinscription — " + request.getPrenom() + " " + request.getNom());
+            mail.setText(corps.toString());
+            mailSender.send(mail);
+        } catch (Exception e) {
+            System.err.println("Email inscription échoué : " + e.getMessage());
+        }
     }
 
     public Inscription updateStatut(Long id, String statut) {

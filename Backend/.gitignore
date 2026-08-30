@@ -34,3 +34,6 @@ build/
 
 ### Fichiers sensibles ###
 src/main/resources/application.properties
+
+### Uploads runtime ###
+uploads/

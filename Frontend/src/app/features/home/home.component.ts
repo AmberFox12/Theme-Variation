@@ -15,6 +15,10 @@ export class HomeComponent implements OnInit {
 
   constructor(private agendaService: AgendaService) {}
 
+  scrollVersCours(): void {
+    document.querySelector('.cours')?.scrollIntoView({ behavior: 'smooth' });
+  }
+
   ngOnInit(): void {
     this.agendaService.getProchainEvenement().subscribe({
       next: data => this.prochainEvenement.set(data),

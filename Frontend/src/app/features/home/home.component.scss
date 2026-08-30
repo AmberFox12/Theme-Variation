@@ -58,7 +58,7 @@ $bordure-claire: #F5D5DF;
   );
   color: #fff;
   margin-top: -60px;
-  padding: 80px 2rem 60px;
+  padding: 80px 2rem 52px;
   text-align: center;
 
   .hero-logo {
@@ -76,6 +76,35 @@ $bordure-claire: #F5D5DF;
     margin: 0 auto;
     line-height: 1.65;
   }
+
+  .scroll-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 36px auto 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    animation: rebondir 2s ease-in-out infinite;
+
+    svg { width: 20px; height: 20px; }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.8);
+      animation-play-state: paused;
+    }
+  }
+}
+
+@keyframes rebondir {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(7px); }
 }
 
 .btn-hero {

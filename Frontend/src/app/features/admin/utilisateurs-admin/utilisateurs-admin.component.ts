@@ -28,13 +28,13 @@ export class UtilisateursAdminComponent implements OnInit {
   }
 
   charger(): void {
-    this.http.get<Compte[]>('http://localhost:8080/api/comptes').subscribe(c => this.comptes.set(c));
+    this.http.get<Compte[]>('/api/comptes').subscribe(c => this.comptes.set(c));
   }
 
   supprimer(compte: Compte): void {
     const msg = `Supprimer le compte de ${compte.prenom} ${compte.nom} ?\n\nCette action supprimera aussi tous ses élèves et leurs inscriptions. Elle est irréversible.`;
     if (!confirm(msg)) return;
-    this.http.delete(`http://localhost:8080/api/comptes/${compte.id}`)
+    this.http.delete(`/api/comptes/${compte.id}`)
       .subscribe(() => this.charger());
   }
 
@@ -45,7 +45,7 @@ export class UtilisateursAdminComponent implements OnInit {
       : `Retirer les droits ADMIN de ${compte.prenom} ${compte.nom} ?`;
     if (!confirm(msg)) return;
 
-    this.http.patch<Compte>(`http://localhost:8080/api/comptes/${compte.id}/role`, { role: nouveauRole })
+    this.http.patch<Compte>(`/api/comptes/${compte.id}/role`, { role: nouveauRole })
       .subscribe({
         next: () => this.charger(),
         error: (err) => alert(`Erreur lors du changement de rôle : ${err.status} ${err.statusText}`)

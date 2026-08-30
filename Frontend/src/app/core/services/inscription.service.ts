@@ -6,7 +6,7 @@ import { Cours } from '../models/cours.model';
 
 @Injectable({ providedIn: 'root' })
 export class InscriptionService {
-  private readonly api = 'http://localhost:8080/api';
+  private readonly api = '/api';
 
   constructor(private http: HttpClient) {}
 

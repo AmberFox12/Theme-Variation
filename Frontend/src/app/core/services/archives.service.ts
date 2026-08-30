@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Historique } from '../models/historique.model';
 import { Spectacle } from '../models/spectacle.model';
 
-export const BACKEND_BASE = 'http://localhost:8080';
+export const BACKEND_BASE = '';
 
 @Injectable({ providedIn: 'root' })
 export class ArchivesService {

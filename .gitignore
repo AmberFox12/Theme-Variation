@@ -1,5 +1,8 @@
 .vscode/
 
+# Secrets — ne jamais committer
+.env
+
 # Fichiers sources favicon (copiés dans Frontend/public/)
 favicon*.png
 favicon*.ico

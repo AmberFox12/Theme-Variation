@@ -47,7 +47,7 @@ export class ContactComponent implements OnInit {
   envoyer(): void {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
     this.envoi.set('envoi');
-    this.http.post('http://localhost:8080/api/contact', this.form.value).subscribe({
+    this.http.post('/api/contact', this.form.value).subscribe({
       next: () => { this.envoi.set('ok'); this.form.reset(); },
       error: () => this.envoi.set('erreur'),
     });

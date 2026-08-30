@@ -6,7 +6,7 @@ import { RegisterRequest } from '../models/register-request.model';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:8080/api/auth';
+  private apiUrl = '/api/auth';
   private tokenKey = 'auth_token';
 
   estConnecte = signal<boolean>(this.getToken() !== null);

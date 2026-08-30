@@ -7,8 +7,8 @@ import { TypeDanse } from '../models/type-danse.model';
 
 @Injectable({ providedIn: 'root' })
 export class CoursService {
-  private apiUrl = 'http://localhost:8080/api/cours';
-  private typesDanseUrl = 'http://localhost:8080/api/types-danse';
+  private apiUrl = '/api/cours';
+  private typesDanseUrl = '/api/types-danse';
 
   constructor(private http: HttpClient) {}
 

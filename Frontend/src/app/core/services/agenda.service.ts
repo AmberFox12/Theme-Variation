@@ -12,7 +12,7 @@ export interface EvenementRequest {
 
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
-  private apiUrl = 'http://localhost:8080/api/agenda';
+  private apiUrl = '/api/agenda';
 
   constructor(private http: HttpClient) {}
 

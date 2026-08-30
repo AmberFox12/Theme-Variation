@@ -5,7 +5,7 @@ import { Parametre } from '../models/parametre.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParametreService {
-  private api = 'http://localhost:8080/api/parametres';
+  private api = '/api/parametres';
 
   constructor(private http: HttpClient) {}
 

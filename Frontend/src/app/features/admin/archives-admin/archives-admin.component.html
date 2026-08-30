@@ -1,0 +1,188 @@
+<div class="archives-admin">
+
+  <div class="page-entete">
+    <h1>Archives</h1>
+    <div class="onglets">
+      <button [class.actif]="onglet() === 'historique'" (click)="onglet.set('historique')">
+        Historique
+      </button>
+      <button [class.actif]="onglet() === 'spectacles'" (click)="onglet.set('spectacles')">
+        Spectacles
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ ONGLET HISTORIQUE ═══ -->
+  @if (onglet() === 'historique') {
+    <div class="contenu">
+      <div class="tableau-wrapper">
+
+        <div class="sous-entete">
+          <span>{{ historique().length }} entrée(s)</span>
+          <button class="btn-primaire" (click)="ouvrirHistorique()">+ Ajouter</button>
+        </div>
+
+        @if (historique().length === 0) {
+          <p class="vide">Aucune entrée dans l'historique.</p>
+        } @else {
+          <table class="tableau">
+            <thead>
+              <tr>
+                <th>Ordre</th>
+                <th>Année</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (h of historique(); track h.id) {
+                <tr>
+                  <td class="col-ordre">{{ h.ordre }}</td>
+                  <td class="col-annee">{{ h.annee }}</td>
+                  <td class="col-titre">{{ h.titre }}</td>
+                  <td class="col-desc">{{ h.description }}</td>
+                  <td class="col-actions">
+                    <button class="btn-lien" (click)="ouvrirHistorique(h)">Modifier</button>
+                    <button class="btn-delete" (click)="supprimerHistorique(h)">🗑</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+
+      <!-- Panneau historique -->
+      @if (panneauHistorique()) {
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h2>{{ editHistorique() ? 'Modifier' : 'Ajouter' }} une entrée</h2>
+            <button class="btn-fermer" (click)="panneauHistorique.set(false)">✕</button>
+          </div>
+          <form class="formulaire" [formGroup]="formHistorique" (ngSubmit)="sauvegarderHistorique()">
+            <label>
+              Année *
+              <input type="text" formControlName="annee" placeholder="ex : 2010" />
+            </label>
+            <label>
+              Titre *
+              <input type="text" formControlName="titre" />
+            </label>
+            <label>
+              Description
+              <textarea formControlName="description" rows="4"></textarea>
+            </label>
+            <label>
+              Ordre d'affichage
+              <input type="number" formControlName="ordre" />
+            </label>
+            <div class="panneau-actions">
+              <button type="button" class="btn-secondaire" (click)="panneauHistorique.set(false)">Annuler</button>
+              <button type="submit" class="btn-primaire" [disabled]="formHistorique.invalid">Sauvegarder</button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- ═══ ONGLET SPECTACLES ═══ -->
+  @if (onglet() === 'spectacles') {
+    <div class="contenu">
+      <div class="tableau-wrapper">
+
+        <div class="sous-entete">
+          <span>{{ spectacles().length }} spectacle(s)</span>
+          <button class="btn-primaire" (click)="ouvrirSpectacle()">+ Ajouter</button>
+        </div>
+
+        @if (spectacles().length === 0) {
+          <p class="vide">Aucun spectacle enregistré.</p>
+        } @else {
+          <table class="tableau">
+            <thead>
+              <tr>
+                <th>Statut</th>
+                <th>Année</th>
+                <th>Titre</th>
+                <th>Lieu</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of spectacles(); track s.id) {
+                <tr>
+                  <td>
+                    <span class="badge" [class.badge--avenir]="s.statut === 'A_VENIR'">
+                      {{ labelStatut(s.statut) }}
+                    </span>
+                  </td>
+                  <td>{{ s.annee }}</td>
+                  <td class="col-titre">{{ s.titre }}</td>
+                  <td class="col-lieu">{{ s.lieu }}</td>
+                  <td class="col-actions">
+                    <button class="btn-lien" (click)="ouvrirSpectacle(s)">Modifier</button>
+                    <button class="btn-delete" (click)="supprimerSpectacle(s)">🗑</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        }
+      </div>
+
+      <!-- Panneau spectacle -->
+      @if (panneauSpectacle()) {
+        <div class="panneau">
+          <div class="panneau-entete">
+            <h2>{{ editSpectacle() ? 'Modifier' : 'Ajouter' }} un spectacle</h2>
+            <button class="btn-fermer" (click)="panneauSpectacle.set(false)">✕</button>
+          </div>
+          <form class="formulaire" [formGroup]="formSpectacle" (ngSubmit)="sauvegarderSpectacle()">
+            <label>
+              Titre *
+              <input type="text" formControlName="titre" />
+            </label>
+            <label>
+              Année *
+              <input type="text" formControlName="annee" placeholder="ex : 2023" />
+            </label>
+            <label>
+              Lieu
+              <input type="text" formControlName="lieu" />
+            </label>
+            <label>
+              Description
+              <textarea formControlName="description" rows="3"></textarea>
+            </label>
+            <label>
+              Statut
+              <select formControlName="statut">
+                @for (s of STATUTS_SPECTACLE; track s.value) {
+                  <option [value]="s.value">{{ s.label }}</option>
+                }
+              </select>
+            </label>
+            <div class="champ-image">
+              <span class="champ-image-label">Image (affiche ou photo)</span>
+              @if (imagePreview()) {
+                <img class="image-preview" [src]="imagePreview()!" alt="Aperçu de l'image" />
+              }
+              <label class="btn-upload">
+                {{ imagePreview() ? 'Changer l\'image' : 'Choisir une image' }}
+                <input type="file" accept="image/*" (change)="onImageChange($event)" hidden />
+              </label>
+              <span class="image-hint">JPG, PNG ou WebP — max 5 Mo</span>
+            </div>
+            <div class="panneau-actions">
+              <button type="button" class="btn-secondaire" (click)="panneauSpectacle.set(false)">Annuler</button>
+              <button type="submit" class="btn-primaire" [disabled]="formSpectacle.invalid">Sauvegarder</button>
+            </div>
+          </form>
+        </div>
+      }
+    </div>
+  }
+
+</div>

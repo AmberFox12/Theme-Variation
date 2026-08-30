@@ -1,0 +1,52 @@
+<div class="page-entete">
+  <h1>Paramètres du site</h1>
+</div>
+
+<div class="formulaire-carte">
+  <h2>Informations de contact</h2>
+  <p class="aide">Ces informations apparaissent sur la page Contact du site.</p>
+
+  <form [formGroup]="form" (ngSubmit)="sauvegarder()" class="formulaire">
+
+    <label>
+      Email de contact
+      <input type="email" formControlName="email" placeholder="association@exemple.fr" />
+    </label>
+
+    <label>
+      Téléphone
+      <input type="text" formControlName="telephone" placeholder="07.00.00.00.00" />
+    </label>
+
+    <label>
+      Adresse
+      <textarea formControlName="adresse" rows="3" placeholder="338, route de Francheville&#10;27130 Verneuil d'Avre et d'Iton"></textarea>
+    </label>
+
+    <hr class="separateur" />
+    <h3>Formulaire de contact</h3>
+
+    <label>
+      Email de notification des messages
+      <input type="email" formControlName="emailNotification" placeholder="notification@exemple.fr" />
+      <span class="aide-champ">Les messages reçus via le formulaire seront envoyés à cette adresse.</span>
+    </label>
+
+    <label>
+      URL d'intégration Google Maps
+      <textarea formControlName="carteEmbedUrl" rows="3" placeholder="https://maps.google.com/maps?q=...&output=embed"></textarea>
+      <span class="aide-champ">Sur Google Maps : Partager → Intégrer une carte → cliquer "Copier le contenu HTML". Vous pouvez coller le code complet ici, l'URL sera extraite automatiquement.</span>
+    </label>
+
+    <div class="actions">
+      <button type="submit" class="btn-sauvegarder">Enregistrer</button>
+      @if (sauvegarde() === 'ok') {
+        <span class="msg-ok">✓ Sauvegardé</span>
+      }
+      @if (sauvegarde() === 'erreur') {
+        <span class="msg-erreur">Erreur lors de la sauvegarde</span>
+      }
+    </div>
+
+  </form>
+</div>

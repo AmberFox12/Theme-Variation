@@ -20,14 +20,14 @@ export class AgendaAdminComponent implements OnInit {
   coursEnEdition = signal<Cours | null>(null);
 
   jours = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-  heures = Array.from({ length: 30 }, (_, i) => {
-    const h = 8 + Math.floor(i / 2);
+  heures = Array.from({ length: 27 }, (_, i) => {
+    const h = 9 + Math.floor(i / 2);
     const m = i % 2 === 0 ? '00' : '30';
     return `${h.toString().padStart(2, '0')}:${m}`;
   });
 
-  readonly PIXELS_PAR_HEURE = 60;
-  readonly HEURE_DEBUT = 8;
+  readonly PIXELS_PAR_HEURE = 80;
+  readonly HEURE_DEBUT = 9;
 
   form = new FormGroup({
     typeDanseId: new FormControl<number | null>(null, Validators.required),
@@ -121,10 +121,10 @@ export class AgendaAdminComponent implements OnInit {
 
   getTop(heureDebut: string): number {
     const [h, m] = heureDebut.split(':').map(Number);
-    return (h - this.HEURE_DEBUT) * this.PIXELS_PAR_HEURE + (m / 60) * this.PIXELS_PAR_HEURE;
+    return (h - this.HEURE_DEBUT) * this.PIXELS_PAR_HEURE + (m / 60) * this.PIXELS_PAR_HEURE + 3;
   }
 
   getHauteur(dureeMinutes: number): number {
-    return (dureeMinutes / 60) * this.PIXELS_PAR_HEURE;
+    return (dureeMinutes / 60) * this.PIXELS_PAR_HEURE - 6;
   }
 }

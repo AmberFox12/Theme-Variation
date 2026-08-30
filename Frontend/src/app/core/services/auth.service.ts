@@ -11,6 +11,7 @@ export class AuthService {
 
   estConnecte = signal<boolean>(this.getToken() !== null);
   role = signal<string>(this.extraireRole());
+  email = signal<string>(this.extraireEmail());
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +25,7 @@ export class AuthService {
         localStorage.setItem(this.tokenKey, response.token);
         this.estConnecte.set(true);
         this.role.set(this.extraireRole());
+        this.email.set(this.extraireEmail());
       })
     );
   }
@@ -44,6 +46,17 @@ export class AuthService {
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       return payload.role ?? '';
+    } catch {
+      return '';
+    }
+  }
+
+  private extraireEmail(): string {
+    const token = this.getToken();
+    if (!token) return '';
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub ?? '';
     } catch {
       return '';
     }

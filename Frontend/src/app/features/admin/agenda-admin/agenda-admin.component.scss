@@ -68,7 +68,7 @@
 .entete-vide { height: 44px; border-bottom: 1px solid #ddd; }
 
 .label-heure {
-  height: 30px;
+  height: 40px;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
@@ -100,9 +100,9 @@
 
 .corps-jour {
   position: relative;
-  height: 900px;
+  height: 1080px;
   background: repeating-linear-gradient(
-    to bottom, #fff 0px, #fff 59px, #e8e8e8 59px, #e8e8e8 60px
+    to bottom, #fff 0px, #fff 39px, #e8e8e8 39px, #e8e8e8 40px
   );
 }
 

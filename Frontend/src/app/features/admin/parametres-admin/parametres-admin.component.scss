@@ -1,0 +1,94 @@
+.page-entete {
+  margin-bottom: 28px;
+  h1 { font-size: 1.4rem; font-weight: 700; }
+}
+
+.formulaire-carte {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 32px 36px;
+  max-width: 600px;
+
+  h2 { font-size: 1.1rem; font-weight: 700; margin: 0 0 6px; }
+  .aide { font-size: 0.85rem; color: #888; margin: 0 0 28px; }
+}
+
+.formulaire {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #444;
+  }
+
+  input, textarea {
+    padding: 9px 12px;
+    border: 1px solid #ddd;
+    border-radius: 7px;
+    font-size: 0.9rem;
+    background: #fafafa;
+    font-family: inherit;
+    resize: vertical;
+
+    &:focus {
+      outline: none;
+      border-color: #3a7bfd;
+      background: #fff;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.btn-sauvegarder {
+  background: #12122a;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 7px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { background: #1e1e46; }
+}
+
+.msg-ok    { color: #2e7d32; font-size: 0.88rem; font-weight: 600; }
+.msg-erreur { color: #c0392b; font-size: 0.88rem; }
+
+.separateur {
+  border: none;
+  border-top: 1px solid #eee;
+  margin: 8px 0 4px;
+}
+
+.formulaire-carte h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #333;
+  margin: 0 0 4px;
+}
+
+.aide-champ {
+  font-size: 0.78rem;
+  color: #888;
+  font-weight: 400;
+}
+
+.champs-ligne {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}

@@ -1,5 +1,4 @@
-<nav class="navbar">
-  <a class="navbar-brand" routerLink="/">Thème et Variations</a>
+<nav class="navbar" [class.navbar--hero]="estPageGradient() && !estDefilee()">
   <ul class="navbar-links">
     <li>
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -7,15 +6,15 @@
       </a>
     </li>
     <li><a routerLink="/agenda" routerLinkActive="active">Agenda</a></li>
-    <li><a routerLink="/inscription" routerLinkActive="active">Inscription</a></li>
+    <li><a routerLink="/archives" routerLinkActive="active">Archives</a></li>
+    <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li>
+    <li><a routerLink="/inscription" routerLinkActive="active">Préinscription</a></li>
 
     @if (authService.estConnecte()) {
       @if (authService.role() === 'ADMIN') {
         <li><a routerLink="/admin" routerLinkActive="active">Espace admin</a></li>
       }
       <li><a (click)="logout()" class="lien-action">Déconnexion</a></li>
-    } @else {
-      <li><a routerLink="/login" routerLinkActive="active">Connexion</a></li>
     }
   </ul>
 </nav>

@@ -1,33 +1,62 @@
+$rose-fonce: #A02848;
+$gris-navbar: #5C5C5C;
+
 .navbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: #1a1a2e;
-}
-
-.navbar-brand {
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: white;
-  text-decoration: none;
+  justify-content: flex-end;
+  padding: 0 2rem;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: $gris-navbar;
+  transition: background 0.25s ease;
 }
 
 .navbar-links {
   display: flex;
-  gap: 2rem;
+  gap: 3rem;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
 .navbar-links a {
-  color: #aaa;
+  color: rgba(255, 255, 255, 0.8);
   text-decoration: none;
   transition: color 0.2s;
+  font-size: 0.95rem;
+  cursor: pointer;
 }
 
 .navbar-links a:hover,
 .navbar-links a.active {
   color: white;
+}
+
+.lien-action {
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: color 0.2s;
+
+  &:hover { color: white; }
+}
+
+/* ── Variante transparente — pages avec dégradé hero ── */
+.navbar--hero {
+  background: transparent;
+
+  .navbar-links a {
+    color: rgba(255, 255, 255, 0.82);
+    &:hover, &.active { color: white; }
+  }
+
+  .lien-action {
+    color: rgba(255, 255, 255, 0.82);
+    &:hover { color: white; }
+  }
 }

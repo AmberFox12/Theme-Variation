@@ -1,4 +1,9 @@
 @if (!estSectionAdmin()) {
   <app-navbar />
+  <div class="page-contenu">
+    <router-outlet />
+  </div>
+  <app-footer />
+} @else {
+  <router-outlet />
 }
-<router-outlet />

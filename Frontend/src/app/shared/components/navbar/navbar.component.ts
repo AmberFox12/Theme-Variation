@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, fromEvent } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
-import { Router } from '@angular/router';
+
+const PAGES_GRADIENT = ['/', '/archives', '/inscription', '/contact'];
 
 @Component({
   selector: 'app-navbar',
@@ -10,7 +13,23 @@ import { Router } from '@angular/router';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent {
-  constructor(public authService: AuthService, private router: Router) {}
+  authService = inject(AuthService);
+  private router = inject(Router);
+
+  estPageGradient = toSignal(
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      map(() => PAGES_GRADIENT.includes(this.router.url))
+    ),
+    { initialValue: PAGES_GRADIENT.includes(this.router.url) }
+  );
+
+  estDefilee = toSignal(
+    fromEvent(document, 'scroll').pipe(
+      map(() => window.scrollY > 80)
+    ),
+    { initialValue: false }
+  );
 
   logout(): void {
     this.authService.logout();

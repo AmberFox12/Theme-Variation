@@ -1,4 +1,4 @@
-votre-domaine.fr {
+themeetvariation.fr {
     handle /api/* {
         reverse_proxy backend:8080
     }

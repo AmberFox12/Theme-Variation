@@ -1,0 +1,85 @@
+<!-- HERO -->
+<div class="archives-hero">
+  <p class="hero-surtitre">Association Thème et Variations</p>
+  <h1>Archives</h1>
+  <p class="hero-accroche">L'histoire de l'association, ses spectacles passés et à venir.</p>
+</div>
+
+<!-- HISTOIRE -->
+<section class="section histoire">
+  <div class="container">
+    <p class="section-surtitre">Depuis le début</p>
+    <h2 class="section-titre">Notre histoire</h2>
+
+    @if (historique().length > 0) {
+      <div class="timeline">
+        @for (item of historique(); track item.id) {
+          <div class="timeline-item">
+            <div class="timeline-annee">{{ item.annee }}</div>
+            <div class="timeline-contenu">
+              <h3>{{ item.titre }}</h3>
+              <p>{{ item.description }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="vide-message">L'historique de l'association sera ajouté prochainement.</p>
+    }
+  </div>
+</section>
+
+<!-- SPECTACLES À VENIR -->
+@if (spectaclesAVenir().length > 0) {
+  <section class="section spectacles">
+    <div class="container">
+      <p class="section-surtitre">À venir</p>
+      <h2 class="section-titre">Prochains spectacles</h2>
+      <div class="spectacles-grille">
+        @for (s of spectaclesAVenir(); track s.id) {
+          <div class="spectacle-carte spectacle-carte--avenir">
+            @if (s.imageUrl) {
+              <div class="spectacle-image">
+                <img [src]="backendBase + s.imageUrl" [alt]="s.titre" />
+              </div>
+            }
+            <div class="spectacle-badge">À venir</div>
+            <div class="spectacle-annee">{{ s.annee }}</div>
+            <h3 class="spectacle-titre">{{ s.titre }}</h3>
+            @if (s.lieu) { <p class="spectacle-lieu">{{ s.lieu }}</p> }
+            @if (s.description) { <p class="spectacle-desc">{{ s.description }}</p> }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+}
+
+<!-- SPECTACLES PASSÉS -->
+<section class="section spectacles spectacles--passes">
+  <div class="container">
+    <p class="section-surtitre">Sur scène</p>
+    <h2 class="section-titre">Nos grands spectacles</h2>
+    <p class="section-sous-titre">Les productions qui ont marqué la vie de l'association.</p>
+
+    @if (spectaclesPasses().length > 0) {
+      <div class="spectacles-grille">
+        @for (s of spectaclesPasses(); track s.id) {
+          <div class="spectacle-carte">
+            @if (s.imageUrl) {
+              <div class="spectacle-image">
+                <img [src]="backendBase + s.imageUrl" [alt]="s.titre" />
+              </div>
+            }
+            <div class="spectacle-annee">{{ s.annee }}</div>
+            <h3 class="spectacle-titre">{{ s.titre }}</h3>
+            @if (s.lieu) { <p class="spectacle-lieu">{{ s.lieu }}</p> }
+            @if (s.description) { <p class="spectacle-desc">{{ s.description }}</p> }
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="vide-message">Les spectacles passés seront ajoutés prochainement.</p>
+    }
+  </div>
+</section>

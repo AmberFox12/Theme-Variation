@@ -1,19 +1,4 @@
 <div class="agenda">
-
-  <section class="prochain-evenement">
-    <h1>Prochain événement</h1>
-    @if (prochainEvenement()) {
-      <div class="evenement-card">
-        <h2>{{ prochainEvenement()!.titre }}</h2>
-        <p class="date">{{ prochainEvenement()!.dateHeure | date:'EEEE d MMMM yyyy à HH:mm' }}</p>
-        <p class="lieu"><strong>Lieu :</strong> {{ prochainEvenement()!.lieu }}</p>
-        <p class="description">{{ prochainEvenement()!.description }}</p>
-      </div>
-    } @else {
-      <p>Aucun événement à venir pour le moment.</p>
-    }
-  </section>
-
   <section class="planning">
     <h1>Planning des cours</h1>
     <div class="grille">
@@ -43,5 +28,4 @@
       }
     </div>
   </section>
-
 </div>

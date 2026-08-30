@@ -1,10 +1,8 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-contenu">
-    <p class="hero-surtitre">École de danse · Verneuil d'Avre et d'Iton</p>
-    <h1>Thème et Variations</h1>
+    <img src="logo-a-removebg-preview.png" alt="Thème et Variations" class="hero-logo" />
     <p class="hero-accroche">Des cours de danse pour tous les âges et tous les niveaux, dans une ambiance chaleureuse et bienveillante.</p>
-    <a routerLink="/inscription" class="btn-hero">S'inscrire 2026-2027</a>
   </div>
 </section>
 
@@ -75,22 +73,44 @@
   </div>
 </section>
 
+<!-- PROCHAIN ÉVÉNEMENT -->
+<section class="section evenement">
+  <div class="container">
+    <p class="section-surtitre">À venir</p>
+    <h2 class="section-titre">Prochain événement</h2>
+
+    @if (prochainEvenement()) {
+      <div class="evenement-carte">
+        <h3>{{ prochainEvenement()!.titre }}</h3>
+        <p class="evenement-date">{{ prochainEvenement()!.dateHeure | date:'EEEE d MMMM yyyy à HH:mm' }}</p>
+        <p class="evenement-lieu"><strong>Lieu :</strong> {{ prochainEvenement()!.lieu }}</p>
+        <p class="evenement-desc">{{ prochainEvenement()!.description }}</p>
+      </div>
+    } @else {
+      <p class="evenement-vide">Aucun événement à venir pour le moment — revenez bientôt !</p>
+    }
+  </div>
+</section>
+
 <!-- LA PROFESSEURE -->
 <section class="section professeure">
   <div class="container professeure-contenu">
     <div class="professeure-photo">
-      <div class="photo-placeholder">
-        <span>📷 Photo à venir</span>
-      </div>
+      <img src="Cécile.jpeg" alt="Cécile, professeure de danse" class="photo-cecile" />
     </div>
     <div class="professeure-texte">
       <p class="section-surtitre">Votre professeure</p>
-      <h2>Prénom Nom</h2>
+      <h2>Cécile</h2>
       <p class="bio">
-        La biographie de la professeure sera ajoutée prochainement.
-        Passionnée par la transmission et la danse sous toutes ses formes,
-        elle vous accompagne avec bienveillance et exigence tout au long de
-        votre parcours à l'association Thème et Variations.
+        Formations : Jazz - Classique - Contemporain <br>
+        Expériances professionnelles principales : <br>
+        Académie de Danse - Pricesse Grace de Monaco (Danse classique)
+        Mudra International - Companie Maurice Béjart (Danse comtemporaine)
+        Danseuse - Assistance Chorégraphie - Répétitrice : <br>
+        Cie Souliko (Danse Russe et Tzigane) <br>
+        TV (Sacrée Soirée, Palace...)
+        Comédie Française (M.P. Mondy/M. de Pourceaugnac) <br>
+        Chorégraphe au sein de l'association Thème et Variations depuis 2003
       </p>
     </div>
   </div>

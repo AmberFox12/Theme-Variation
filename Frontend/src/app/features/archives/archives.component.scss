@@ -1,0 +1,373 @@
+// ── Palette rose → bleu (pastel doux) ─────────────────
+$rose:           #D4507A;
+$rose-fonce:     #A02848;
+$bleu:           #6A9FCB;
+$bleu-fonce:     #3A5080;
+$bg-clair:       #FEF0F4;
+$bg-bleu:        #F0F5FD;
+$bg-alt:         #FCE8EE;
+$texte:          #2A1A28;
+$texte-moyen:    #7A6070;
+$bordure:        #ECC0CC;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.section { padding: 80px 0; }
+
+.section-titre {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: $rose;
+  margin: 0 0 12px;
+}
+
+.section-sous-titre {
+  text-align: center;
+  color: $texte-moyen;
+  font-size: 1.05rem;
+  margin: 0 0 48px;
+}
+
+.section-surtitre {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: $bleu;
+  text-align: center;
+  margin: 0 0 8px;
+}
+
+/* ── HERO ── */
+.archives-hero {
+  background: linear-gradient(135deg,
+    #D4507A  0%,
+    #D4507A 14%,
+    #B03890 38%,
+    #7535A8 58%,
+    #3A4FAE 76%,
+    #4AADD4 92%
+  );
+  color: #fff;
+  margin-top: -60px;
+  padding: 150px 2rem 80px;
+  text-align: center;
+
+  .hero-surtitre {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 16px;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: #fff;
+    margin: 0 0 18px;
+  }
+
+  .hero-accroche {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.88);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+}
+
+/* ── HISTOIRE / TIMELINE ── */
+.histoire {
+  background: $bg-clair;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 48px;
+  margin-top: 40px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 14px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, $rose, $bleu);
+    border-radius: 2px;
+  }
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 44px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: -40px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: $rose;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 2px $rose;
+  }
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.timeline-annee {
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $bleu;
+  margin-bottom: 6px;
+}
+
+.timeline-contenu {
+  background: #fff;
+  border-radius: 10px;
+  padding: 22px 26px;
+  border: 1px solid $bordure;
+
+  h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: $rose;
+    margin: 0 0 10px;
+  }
+
+  p {
+    color: $texte-moyen;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 0.93rem;
+  }
+}
+
+/* ── ORGANIGRAMME ── */
+.organigramme {
+  background: #fff;
+}
+
+.arbre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 40px;
+}
+
+.arbre-niveau {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.arbre-niveau--racine {
+  margin-bottom: 0;
+}
+
+.arbre-branche {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  &::before {
+    content: '';
+    display: block;
+    width: 2px;
+    height: 36px;
+    background: linear-gradient(to bottom, $rose, $bleu);
+    margin: 0 auto;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 60%;
+    height: 2px;
+    background: $bleu;
+    margin: 0 auto 0;
+    margin-bottom: 0;
+  }
+
+  .arbre-niveau {
+    margin-top: 0;
+    position: relative;
+
+    .arbre-noeud::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 20px;
+      background: $bleu;
+    }
+  }
+}
+
+.arbre-noeud {
+  background: $bg-clair;
+  border: 1.5px solid $bordure;
+  border-radius: 10px;
+  padding: 18px 22px;
+  text-align: center;
+  min-width: 160px;
+  position: relative;
+
+  &--principal {
+    background: $rose;
+    border-color: $rose;
+    color: #fff;
+    min-width: 220px;
+
+    .noeud-role { color: rgba(255,255,255,0.75); }
+    .noeud-nom { color: #fff; }
+    .noeud-periode { color: rgba(255,255,255,0.6); }
+  }
+}
+
+.noeud-role {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: $bleu;
+  margin-bottom: 6px;
+}
+
+.noeud-nom {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $texte;
+  margin-bottom: 4px;
+}
+
+.noeud-periode {
+  font-size: 0.75rem;
+  color: $texte-moyen;
+}
+
+.arbre-mention {
+  text-align: center;
+  color: $texte-moyen;
+  font-size: 0.82rem;
+  font-style: italic;
+  margin-top: 36px;
+}
+
+/* ── SPECTACLES ── */
+.spectacles {
+  background: $bg-bleu;
+}
+
+.spectacles-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 8px;
+}
+
+.spectacle-carte {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #D0DFF5;
+  padding: 28px;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: 0 6px 24px rgba(106, 159, 203, 0.14);
+  }
+
+  &--placeholder {
+    border-style: dashed;
+    background: transparent;
+
+    .spectacle-titre { color: $texte-moyen; }
+  }
+}
+
+.spectacle-image {
+  margin: -28px -28px 20px -28px;
+  height: 320px;
+  overflow: hidden;
+  background: #12122a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+.spectacle-annee {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: $bleu;
+  margin-bottom: 10px;
+}
+
+.spectacle-titre {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: $rose;
+  margin: 0 0 12px;
+}
+
+.spectacle-lieu {
+  font-size: 0.85rem;
+  color: $texte-moyen;
+  margin: 0 0 8px;
+}
+
+.spectacle-desc {
+  font-size: 0.87rem;
+  color: $texte-moyen;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.spectacle-badge {
+  display: inline-block;
+  background: $bleu-fonce;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.vide-message {
+  text-align: center;
+  color: $texte-moyen;
+  font-style: italic;
+  margin-top: 32px;
+}

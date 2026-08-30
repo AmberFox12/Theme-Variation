@@ -1,38 +1,50 @@
-$bordeaux:       #7C1F35;
-$bordeaux-fonce: #521526;
-$accent:         #C94A25;
-$bg-clair:       #FDF8F7;
-$bg-alt:         #F3E8EA;
-$texte:          #1A1A1A;
-$texte-moyen:    #5a5a5a;
+// ── Palette rose → bleu (pastel doux) ─────────────────
+$rose:           #D4507A;
+$rose-fonce:     #A02848;
+$bleu:           #6A9FCB;
+$bg-clair:       #FEF0F4;
+$bg-bleu:        #F0F5FD;
+$bg-alt:         #FCE8EE;
+$texte:          #2A1A28;
+$texte-moyen:    #7A6070;
+$bordure:        #ECC0CC;
 
 *, *::before, *::after { box-sizing: border-box; }
 
 /* ── PAGE HEADER ── */
 .page-header {
-  background: $bordeaux-fonce;
+  background: linear-gradient(135deg,
+    #D4507A  0%,
+    #D4507A 14%,
+    #B03890 38%,
+    #7535A8 58%,
+    #3A4FAE 76%,
+    #4AADD4 92%
+  );
   color: #fff;
   text-align: center;
-  padding: 70px 2rem 60px;
+  margin-top: -60px;
+  padding: 130px 2rem 60px;
 
   .page-surtitre {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     font-size: 0.8rem;
-    opacity: 0.65;
+    color: rgba(255, 255, 255, 0.8);
     margin: 0 0 12px;
   }
 
   h1 {
     font-size: clamp(2rem, 5vw, 3rem);
     font-weight: 900;
+    color: #fff;
     margin: 0 0 16px;
     letter-spacing: -0.02em;
   }
 
   .page-accroche {
     font-size: 1rem;
-    opacity: 0.82;
+    color: rgba(255, 255, 255, 0.88);
     max-width: 560px;
     margin: 0 auto;
     line-height: 1.65;
@@ -50,10 +62,10 @@ $texte-moyen:    #5a5a5a;
 .form-section {
   background: #fff;
   border-radius: 14px;
-  border: 1px solid #e5d0d4;
+  border: 1px solid $bordure;
   padding: 36px 40px;
   margin-top: 32px;
-  box-shadow: 0 2px 12px rgba(124, 31, 53, 0.05);
+  box-shadow: 0 2px 12px rgba(212, 80, 122, 0.06);
 
   @media (max-width: 600px) {
     padding: 24px 20px;
@@ -66,7 +78,7 @@ $texte-moyen:    #5a5a5a;
   gap: 14px;
   font-size: 1.25rem;
   font-weight: 800;
-  color: $bordeaux;
+  color: $rose;
   margin: 0 0 6px;
 
   .section-num {
@@ -75,7 +87,7 @@ $texte-moyen:    #5a5a5a;
     justify-content: center;
     width: 32px;
     height: 32px;
-    background: $bordeaux;
+    background: $rose;
     color: #fff;
     border-radius: 50%;
     font-size: 0.9rem;
@@ -117,7 +129,7 @@ $texte-moyen:    #5a5a5a;
   }
 
   input {
-    border: 1.5px solid #d9c5c9;
+    border: 1.5px solid #D9C0CC;
     border-radius: 7px;
     padding: 10px 13px;
     font-size: 0.95rem;
@@ -128,8 +140,8 @@ $texte-moyen:    #5a5a5a;
 
     &:focus {
       outline: none;
-      border-color: $bordeaux;
-      box-shadow: 0 0 0 3px rgba(124, 31, 53, 0.1);
+      border-color: $rose;
+      box-shadow: 0 0 0 3px rgba(212, 80, 122, 0.12);
     }
 
     &.invalide {
@@ -139,7 +151,7 @@ $texte-moyen:    #5a5a5a;
 }
 
 .requis {
-  color: $accent;
+  color: $bleu;
 }
 
 .erreur-champ {
@@ -149,15 +161,13 @@ $texte-moyen:    #5a5a5a;
 
 /* ── CARTE ÉLÈVE ── */
 .eleve-card {
-  border: 1.5px solid #e5d0d4;
+  border: 1.5px solid $bordure;
   border-radius: 10px;
   padding: 28px;
   margin-bottom: 20px;
   background: $bg-clair;
 
-  &:last-of-type {
-    margin-bottom: 0;
-  }
+  &:last-of-type { margin-bottom: 0; }
 }
 
 .eleve-card-header {
@@ -169,14 +179,14 @@ $texte-moyen:    #5a5a5a;
   h3 {
     font-size: 1rem;
     font-weight: 700;
-    color: $bordeaux;
+    color: $rose;
     margin: 0;
   }
 }
 
 .btn-supprimer {
   background: none;
-  border: 1px solid #d9c5c9;
+  border: 1px solid $bordure;
   color: $texte-moyen;
   font-size: 0.8rem;
   padding: 5px 12px;
@@ -193,7 +203,7 @@ $texte-moyen:    #5a5a5a;
 /* ── SÉLECTION COURS ── */
 .cours-selection {
   margin-top: 24px;
-  border-top: 1px solid #e5d0d4;
+  border-top: 1px solid $bordure;
   padding-top: 20px;
 }
 
@@ -218,7 +228,7 @@ $texte-moyen:    #5a5a5a;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: $bordeaux;
+    color: $rose;
     margin: 0 0 10px;
     padding-bottom: 6px;
     border-bottom: 2px solid $bg-alt;
@@ -235,17 +245,12 @@ $texte-moyen:    #5a5a5a;
   margin-bottom: 4px;
   transition: background 0.15s;
 
-  &:hover {
-    background: $bg-alt;
-  }
-
-  &.selectionne {
-    background: rgba(124, 31, 53, 0.07);
-  }
+  &:hover { background: $bg-bleu; }
+  &.selectionne { background: rgba(106, 159, 203, 0.1); }
 
   input[type="checkbox"] {
     margin-top: 3px;
-    accent-color: $bordeaux;
+    accent-color: $bleu;
     flex-shrink: 0;
   }
 
@@ -274,16 +279,16 @@ $texte-moyen:    #5a5a5a;
   margin-top: 20px;
   padding: 13px;
   background: none;
-  border: 2px dashed #c8a0a8;
+  border: 2px dashed #C8A0C8;
   border-radius: 10px;
-  color: $bordeaux;
+  color: $rose;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.2s, background 0.2s;
 
   &:hover {
-    border-color: $bordeaux;
+    border-color: $rose;
     background: $bg-alt;
   }
 }
@@ -313,7 +318,7 @@ $texte-moyen:    #5a5a5a;
 }
 
 .btn-soumettre {
-  background: $bordeaux;
+  background: $rose;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -324,7 +329,7 @@ $texte-moyen:    #5a5a5a;
   transition: background 0.2s, transform 0.15s;
 
   &:hover:not(:disabled) {
-    background: $bordeaux-fonce;
+    background: $rose-fonce;
     transform: translateY(-1px);
   }
 
@@ -347,16 +352,16 @@ $texte-moyen:    #5a5a5a;
 .confirmation-contenu {
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #e5d0d4;
+  border: 1px solid $bordure;
   padding: 56px 48px;
   text-align: center;
   max-width: 520px;
-  box-shadow: 0 4px 24px rgba(124, 31, 53, 0.08);
+  box-shadow: 0 4px 24px rgba(212, 80, 122, 0.08);
 
   .confirmation-icone {
     width: 64px;
     height: 64px;
-    background: $bordeaux;
+    background: $rose;
     color: #fff;
     border-radius: 50%;
     display: flex;
@@ -369,7 +374,7 @@ $texte-moyen:    #5a5a5a;
   h2 {
     font-size: 1.8rem;
     font-weight: 800;
-    color: $bordeaux;
+    color: $rose;
     margin: 0 0 16px;
   }
 
@@ -382,5 +387,21 @@ $texte-moyen:    #5a5a5a;
   .confirmation-contact {
     font-size: 0.88rem;
     color: $texte-moyen;
+    margin-bottom: 28px;
   }
+}
+
+.btn-accueil {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 11px 28px;
+  background: $rose;
+  color: #fff;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  transition: background 0.2s;
+
+  &:hover { background: $rose-fonce; }
 }

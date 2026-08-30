@@ -1,11 +1,12 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InscriptionService } from '../../core/services/inscription.service';
 import { Cours } from '../../core/models/cours.model';
 
 @Component({
   selector: 'app-inscription',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './inscription.component.html',
   styleUrl: './inscription.component.scss'
 })

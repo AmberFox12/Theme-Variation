@@ -3,6 +3,7 @@ package com.themevariation.backend.service;
 import com.themevariation.backend.dto.ElevePubliqueDto;
 import com.themevariation.backend.dto.InscriptionPubliqueRequest;
 import com.themevariation.backend.dto.InscriptionRequest;
+import com.themevariation.backend.exception.ResourceNotFoundException;
 import com.themevariation.backend.model.Compte;
 import com.themevariation.backend.model.Cours;
 import com.themevariation.backend.model.Eleve;
@@ -12,10 +13,13 @@ import com.themevariation.backend.repository.CoursRepository;
 import com.themevariation.backend.repository.EleveRepository;
 import com.themevariation.backend.repository.InscriptionRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,11 +32,14 @@ import java.util.UUID;
 @Service
 public class InscriptionService {
 
+    private static final Logger log = LoggerFactory.getLogger(InscriptionService.class);
+
     private final InscriptionRepository inscriptionRepository;
     private final EleveRepository eleveRepository;
     private final CoursRepository coursRepository;
     private final CompteRepository compteRepository;
     private final ParametreService parametreService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired(required = false)
     private JavaMailSender mailSender;
@@ -44,23 +51,25 @@ public class InscriptionService {
                               EleveRepository eleveRepository,
                               CoursRepository coursRepository,
                               CompteRepository compteRepository,
-                              ParametreService parametreService) {
+                              ParametreService parametreService,
+                              PasswordEncoder passwordEncoder) {
         this.inscriptionRepository = inscriptionRepository;
         this.eleveRepository = eleveRepository;
         this.coursRepository = coursRepository;
         this.compteRepository = compteRepository;
         this.parametreService = parametreService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<Inscription> getAll() {
-        return inscriptionRepository.findAll();
+        return inscriptionRepository.findAllWithEleveEtCours();
     }
 
     public Inscription creer(InscriptionRequest request) {
         Eleve eleve = eleveRepository.findById(request.getEleveId())
-                .orElseThrow(() -> new RuntimeException("Élève introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Élève introuvable"));
         Cours cours = coursRepository.findById(request.getCoursId())
-                .orElseThrow(() -> new RuntimeException("Cours introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cours introuvable"));
 
         Inscription inscription = new Inscription();
         inscription.setEleve(eleve);
@@ -82,7 +91,7 @@ public class InscriptionService {
         compte.setPrenom(request.getPrenom());
         compte.setTelephone(request.getTelephone());
         compte.setAdresse(request.getAdresse());
-        compte.setMotDePasse(UUID.randomUUID().toString());
+        compte.setMotDePasse(passwordEncoder.encode(UUID.randomUUID().toString()));
         compte.setRole("ELEVE");
         compteRepository.save(compte);
 
@@ -104,7 +113,7 @@ public class InscriptionService {
                 if (dto.getCoursIds() != null) {
                     for (Long coursId : dto.getCoursIds()) {
                         Cours cours = coursRepository.findById(coursId)
-                                .orElseThrow(() -> new RuntimeException("Cours introuvable : " + coursId));
+                                .orElseThrow(() -> new ResourceNotFoundException("Cours introuvable : " + coursId));
                         nomsCours.add(cours.getNom());
                         Inscription inscription = new Inscription();
                         inscription.setEleve(eleve);
@@ -149,13 +158,13 @@ public class InscriptionService {
             mail.setText(corps.toString());
             mailSender.send(mail);
         } catch (Exception e) {
-            System.err.println("Email inscription échoué : " + e.getMessage());
+            log.warn("Email inscription échoué : {}", e.getMessage());
         }
     }
 
     public Inscription updateStatut(Long id, String statut) {
         Inscription inscription = inscriptionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Inscription introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Inscription introuvable"));
         inscription.setStatut(statut);
         return inscriptionRepository.save(inscription);
     }

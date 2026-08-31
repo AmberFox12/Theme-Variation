@@ -2,6 +2,7 @@ package com.themevariation.backend.service;
 
 import org.springframework.stereotype.Service;
 import com.themevariation.backend.dto.EvenementDto;
+import com.themevariation.backend.exception.ResourceNotFoundException;
 import com.themevariation.backend.model.Evenement;
 import com.themevariation.backend.repository.EvenementRepository;
 
@@ -38,7 +39,7 @@ public class AgendaService {
 
     public Evenement modifier(Long id, EvenementDto dto) {
         Evenement evenement = evenementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Événement introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Événement introuvable"));
         remplir(evenement, dto);
         return evenementRepository.save(evenement);
     }

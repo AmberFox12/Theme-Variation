@@ -1,6 +1,7 @@
 package com.themevariation.backend.service;
 
 import com.themevariation.backend.dto.CoursRequest;
+import com.themevariation.backend.exception.ResourceNotFoundException;
 import com.themevariation.backend.model.Cours;
 import com.themevariation.backend.model.TypeDanse;
 import com.themevariation.backend.repository.CoursRepository;
@@ -22,7 +23,7 @@ public class CoursService {
     }
 
     public List<Cours> getCours() {
-        return coursRepository.findAll();
+        return coursRepository.findAllWithTypeDanse();
     }
 
     public Cours creer(CoursRequest request) {
@@ -33,7 +34,7 @@ public class CoursService {
 
     public Cours modifier(Long id, CoursRequest request) {
         Cours cours = coursRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cours introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cours introuvable"));
         remplir(cours, request);
         return coursRepository.save(cours);
     }
@@ -44,7 +45,7 @@ public class CoursService {
 
     private void remplir(Cours cours, CoursRequest request) {
         TypeDanse typeDanse = typeDanseRepository.findById(request.getTypeDanseId())
-                .orElseThrow(() -> new RuntimeException("Type de danse introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Type de danse introuvable"));
         cours.setTypeDanse(typeDanse);
         cours.setNom(request.getNom());
         cours.setJour(request.getJour());

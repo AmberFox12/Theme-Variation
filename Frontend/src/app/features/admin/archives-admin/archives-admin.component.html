@@ -173,7 +173,11 @@
                 {{ imagePreview() ? 'Changer l\'image' : 'Choisir une image' }}
                 <input type="file" accept="image/*" (change)="onImageChange($event)" hidden />
               </label>
-              <span class="image-hint">JPG, PNG ou WebP — max 5 Mo</span>
+              @if (imageErreur()) {
+                <span class="image-erreur">{{ imageErreur() }}</span>
+              } @else {
+                <span class="image-hint">JPG, PNG ou WebP — max 5 Mo</span>
+              }
             </div>
             <div class="panneau-actions">
               <button type="button" class="btn-secondaire" (click)="panneauSpectacle.set(false)">Annuler</button>

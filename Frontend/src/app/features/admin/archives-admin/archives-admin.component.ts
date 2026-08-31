@@ -34,6 +34,7 @@ export class ArchivesAdminComponent implements OnInit {
   panneauSpectacle = signal(false);
   imageFile = signal<File | null>(null);
   imagePreview = signal<string | null>(null);
+  imageErreur = signal<string | null>(null);
 
   readonly STATUTS_SPECTACLE = [
     { value: 'A_VENIR', label: 'À venir' },
@@ -98,6 +99,7 @@ export class ArchivesAdminComponent implements OnInit {
     this.editSpectacle.set(s ?? null);
     this.imageFile.set(null);
     this.imagePreview.set(s?.imageUrl ? `${this.backendBase}${s.imageUrl}` : null);
+    this.imageErreur.set(null);
     this.formSpectacle.reset(s
       ? { titre: s.titre, annee: s.annee, lieu: s.lieu, description: s.description, statut: s.statut }
       : { titre: '', annee: '', lieu: '', description: '', statut: 'A_VENIR' }
@@ -108,6 +110,13 @@ export class ArchivesAdminComponent implements OnInit {
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
+    if (file && file.size > 5 * 1024 * 1024) {
+      this.imageErreur.set('Le fichier est trop volumineux (max 5 Mo).');
+      this.imageFile.set(null);
+      input.value = '';
+      return;
+    }
+    this.imageErreur.set(null);
     this.imageFile.set(file);
     if (file) {
       const reader = new FileReader();

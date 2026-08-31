@@ -95,6 +95,34 @@ public class AuthService {
     }
 
     @Transactional
+    public void envoyerLienDefinitionMotDePasse(Compte compte) {
+        resetTokenRepository.deleteByEmail(compte.getEmail());
+        resetTokenRepository.deleteByExpiryBefore(LocalDateTime.now());
+
+        String token = UUID.randomUUID().toString();
+        ResetPasswordToken resetToken = new ResetPasswordToken();
+        resetToken.setToken(token);
+        resetToken.setEmail(compte.getEmail());
+        resetToken.setExpiry(LocalDateTime.now().plusHours(24));
+        resetTokenRepository.save(resetToken);
+
+        String lien = frontendUrl + "/reinitialiser-mot-de-passe?token=" + token;
+
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(mailFrom);
+        message.setTo(compte.getEmail());
+        message.setSubject("Votre accès administrateur — Thème et Variations");
+        message.setText(
+            "Bonjour " + compte.getPrenom() + ",\n\n" +
+            "Vous avez été ajouté(e) en tant qu'administrateur de l'espace Thème et Variations.\n\n" +
+            "Cliquez sur le lien suivant pour définir votre mot de passe (valable 24 heures) :\n" +
+            lien + "\n\n" +
+            "L'équipe Thème et Variations"
+        );
+        mailSender.send(message);
+    }
+
+    @Transactional
     public void reinitialiserMotDePasse(ReinitialiserMotDePasseRequest request) {
         ResetPasswordToken resetToken = resetTokenRepository.findByToken(request.getToken())
             .orElseThrow(() -> new RuntimeException("Lien invalide ou expiré"));

@@ -3,7 +3,9 @@ package com.themevariation.backend.controller;
 import com.themevariation.backend.dto.EleveRequest;
 import com.themevariation.backend.model.Eleve;
 import com.themevariation.backend.repository.EleveRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/eleves")
+@PreAuthorize("hasRole('ADMIN')")
 public class EleveController {
 
     private final EleveRepository eleveRepository;
@@ -25,7 +28,7 @@ public class EleveController {
     }
 
     @PostMapping
-    public ResponseEntity<Eleve> creer(@RequestBody EleveRequest request) {
+    public ResponseEntity<Eleve> creer(@Valid @RequestBody EleveRequest request) {
         Eleve eleve = new Eleve();
         eleve.setNom(request.getNom());
         eleve.setPrenom(request.getPrenom());

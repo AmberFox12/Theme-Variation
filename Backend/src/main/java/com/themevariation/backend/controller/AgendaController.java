@@ -3,7 +3,9 @@ package com.themevariation.backend.controller;
 import com.themevariation.backend.dto.EvenementDto;
 import com.themevariation.backend.model.Evenement;
 import com.themevariation.backend.service.AgendaService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,16 +32,19 @@ public class AgendaController {
                 .orElse(ResponseEntity.noContent().build());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Evenement> creer(@RequestBody EvenementDto dto) {
+    public ResponseEntity<Evenement> creer(@Valid @RequestBody EvenementDto dto) {
         return ResponseEntity.ok(agendaService.creer(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Evenement> modifier(@PathVariable Long id, @RequestBody EvenementDto dto) {
+    public ResponseEntity<Evenement> modifier(@PathVariable Long id, @Valid @RequestBody EvenementDto dto) {
         return ResponseEntity.ok(agendaService.modifier(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> supprimer(@PathVariable Long id) {
         agendaService.supprimer(id);

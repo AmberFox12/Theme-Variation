@@ -1,8 +1,14 @@
 package com.themevariation.backend.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class HistoriqueRequest {
+    @NotBlank(message = "L'année est obligatoire")
     private String annee;
+
+    @NotBlank(message = "Le titre est obligatoire")
     private String titre;
+
     private String description;
     private int ordre;
 

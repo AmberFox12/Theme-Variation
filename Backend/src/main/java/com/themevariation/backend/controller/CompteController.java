@@ -1,5 +1,6 @@
 package com.themevariation.backend.controller;
 
+import com.themevariation.backend.exception.ResourceNotFoundException;
 import com.themevariation.backend.model.Compte;
 import com.themevariation.backend.model.Eleve;
 import com.themevariation.backend.repository.CompteRepository;
@@ -7,6 +8,7 @@ import com.themevariation.backend.repository.EleveRepository;
 import com.themevariation.backend.repository.InscriptionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/comptes")
+@PreAuthorize("hasRole('ADMIN')")
 public class CompteController {
 
     private final CompteRepository compteRepository;
@@ -42,7 +45,7 @@ public class CompteController {
     @Transactional
     public ResponseEntity<Void> supprimer(@PathVariable Long id) {
         Compte compte = compteRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Compte introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Compte introuvable"));
         List<Eleve> eleves = eleveRepository.findByCompte(compte);
         for (Eleve eleve : eleves) {
             inscriptionRepository.deleteByEleve(eleve);
@@ -61,6 +64,6 @@ public class CompteController {
             }
             c.setRole(role);
             return ResponseEntity.ok(compteRepository.save(c));
-        }).orElseThrow(() -> new RuntimeException("Compte introuvable"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Compte introuvable"));
     }
 }

@@ -4,6 +4,8 @@ import com.themevariation.backend.dto.MessageContactRequest;
 import com.themevariation.backend.model.MessageContact;
 import com.themevariation.backend.model.Parametre;
 import com.themevariation.backend.repository.MessageContactRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,6 +16,8 @@ import java.util.List;
 
 @Service
 public class MessageContactService {
+
+    private static final Logger log = LoggerFactory.getLogger(MessageContactService.class);
 
     private final MessageContactRepository repo;
     private final ParametreService parametreService;
@@ -61,7 +65,7 @@ public class MessageContactService {
             );
             mailSender.send(mail);
         } catch (Exception e) {
-            System.err.println("Envoi email échoué (message sauvegardé en BDD) : " + e.getMessage());
+            log.warn("Envoi email échoué (message sauvegardé en BDD) : {}", e.getMessage());
         }
     }
 

@@ -1,15 +1,20 @@
 package com.themevariation.backend.service;
 
 import com.themevariation.backend.dto.SpectacleRequest;
+import com.themevariation.backend.exception.ResourceNotFoundException;
 import com.themevariation.backend.model.Spectacle;
 import com.themevariation.backend.repository.SpectacleRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 
 @Service
@@ -37,7 +42,7 @@ public class SpectacleService {
 
     public Spectacle modifier(Long id, SpectacleRequest request) {
         Spectacle s = spectacleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spectacle introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Spectacle introuvable"));
         s.setTitre(request.getTitre());
         s.setAnnee(request.getAnnee());
         s.setLieu(request.getLieu());
@@ -52,16 +57,28 @@ public class SpectacleService {
 
     public Spectacle uploadImage(Long id, MultipartFile file) {
         Spectacle s = spectacleRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Spectacle introuvable"));
+                .orElseThrow(() -> new ResourceNotFoundException("Spectacle introuvable"));
         try {
+            byte[] contenu = file.getBytes();
+
+            // On vérifie que le fichier est réellement une image décodable,
+            // pas seulement que son nom se termine par une extension d'image.
+            BufferedImage image = ImageIO.read(new ByteArrayInputStream(contenu));
+            if (image == null) {
+                throw new IllegalArgumentException("Le fichier envoyé n'est pas une image valide (jpg, png ou webp).");
+            }
+
+            String ext = switch (file.getContentType() != null ? file.getContentType() : "") {
+                case "image/png" -> ".png";
+                case "image/webp" -> ".webp";
+                default -> ".jpg";
+            };
+
             Path uploadDir = Paths.get("uploads/spectacles");
             Files.createDirectories(uploadDir);
-            String originalFilename = file.getOriginalFilename();
-            String ext = (originalFilename != null && originalFilename.contains("."))
-                    ? originalFilename.substring(originalFilename.lastIndexOf("."))
-                    : ".jpg";
             String filename = id + "_" + System.currentTimeMillis() + ext;
-            Files.copy(file.getInputStream(), uploadDir.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
+            Files.write(uploadDir.resolve(filename), contenu,
+                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
             s.setImageUrl("/uploads/spectacles/" + filename);
             return spectacleRepository.save(s);
         } catch (IOException e) {

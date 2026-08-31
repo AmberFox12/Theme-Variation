@@ -30,6 +30,15 @@ export class ContactComponent implements OnInit {
     private sanitizer: DomSanitizer
   ) {}
 
+  private static readonly HOTES_CARTE_AUTORISES = [
+    'https://www.google.com/maps',
+    'https://maps.google.com',
+    'https://www.google.fr/maps',
+  ];
+
+  private static readonly CARTE_PAR_DEFAUT =
+    `https://maps.google.com/maps?q=${encodeURIComponent("338 route de Francheville 27130 Verneuil d'Avre et d'Iton")}&output=embed&hl=fr`;
+
   ngOnInit(): void {
     this.parametreService.get().subscribe(p => {
       this.parametre.set(p);
@@ -39,7 +48,11 @@ export class ContactComponent implements OnInit {
         const match = url.match(/src="([^"]+)"/);
         url = match ? match[1] : null;
       }
-      url ??= `https://maps.google.com/maps?q=${encodeURIComponent('338 route de Francheville 27130 Verneuil d\'Avre et d\'Iton')}&output=embed&hl=fr`;
+      // On ne fait confiance qu'à une URL Google Maps : ce champ est ensuite
+      // rendu de confiance (bypassSecurityTrustResourceUrl), donc toute autre
+      // valeur serait une porte ouverte à du XSS pour tous les visiteurs.
+      const estAutorisee = !!url && ContactComponent.HOTES_CARTE_AUTORISES.some(hote => url!.startsWith(hote));
+      url = estAutorisee ? url! : ContactComponent.CARTE_PAR_DEFAUT;
       this.carteUrl.set(this.sanitizer.bypassSecurityTrustResourceUrl(url));
     });
   }

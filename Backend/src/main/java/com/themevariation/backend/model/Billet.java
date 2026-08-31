@@ -18,11 +18,11 @@ public class Billet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compte_id", nullable = false)
     private Compte compte;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evenement_id", nullable = false)
     private Evenement evenement;
 

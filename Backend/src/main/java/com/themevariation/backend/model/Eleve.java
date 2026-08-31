@@ -1,5 +1,6 @@
 package com.themevariation.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "eleves")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Eleve {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compte_id")
     private Compte compte; // optionnel — peut être null si pas de compte en ligne
 

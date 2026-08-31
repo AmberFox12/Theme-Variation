@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.time.LocalTime;
 
@@ -13,13 +14,14 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "cours")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Cours {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "type_danse_id", nullable = false)
     private TypeDanse typeDanse;
 

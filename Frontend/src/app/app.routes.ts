@@ -13,6 +13,8 @@ import { AgendaComponent } from './features/agenda/agenda.component';
 import { ContactComponent } from './features/contact/contact.component';
 import { ParametresAdminComponent } from './features/admin/parametres-admin/parametres-admin.component';
 import { UtilisateursAdminComponent } from './features/admin/utilisateurs-admin/utilisateurs-admin.component';
+import { MotDePasseOublieComponent } from './features/admin/mot-de-passe-oublie/mot-de-passe-oublie.component';
+import { ReinitialiserMotDePasseComponent } from './features/admin/reinitialiser-mot-de-passe/reinitialiser-mot-de-passe.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
@@ -21,6 +23,8 @@ export const routes: Routes = [
     { path: 'archives', component: ArchivesComponent},
     { path: 'contact', component: ContactComponent},
     { path: 'login', component: LoginComponent},
+    { path: 'mot-de-passe-oublie', component: MotDePasseOublieComponent },
+    { path: 'reinitialiser-mot-de-passe', component: ReinitialiserMotDePasseComponent },
     {
         path: 'admin',
         component: AdminComponent,

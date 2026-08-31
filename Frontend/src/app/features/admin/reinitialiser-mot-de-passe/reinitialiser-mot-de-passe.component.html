@@ -1,0 +1,51 @@
+<div class="reset-page">
+  <div class="reset-carte">
+    <div class="reset-entete">
+      <span class="reset-titre">Thème et Variations</span>
+      <span class="reset-sous-titre">Nouveau mot de passe</span>
+    </div>
+
+    <div class="reset-corps">
+      @if (tokenManquant()) {
+        <div class="alerte-erreur">Lien invalide. Veuillez refaire une demande de réinitialisation.</div>
+        <a routerLink="/mot-de-passe-oublie" class="lien-retour">← Refaire une demande</a>
+
+      } @else if (confirme()) {
+        <div class="alerte-succes">
+          <p>Votre mot de passe a été modifié avec succès.</p>
+          <p>Redirection vers la connexion dans quelques secondes…</p>
+        </div>
+        <a routerLink="/login" class="lien-retour">← Aller à la connexion</a>
+
+      } @else {
+        <h1>Nouveau mot de passe</h1>
+
+        @if (erreur()) {
+          <div class="alerte-erreur">{{ erreur() }}</div>
+        }
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="champ">
+            <label for="mdp">Nouveau mot de passe</label>
+            <input id="mdp" type="password" formControlName="nouveauMotDePasse" placeholder="8 caractères minimum" autocomplete="new-password" />
+            @if (form.get('nouveauMotDePasse')?.touched && form.get('nouveauMotDePasse')?.hasError('minlength')) {
+              <span class="champ-erreur">8 caractères minimum</span>
+            }
+          </div>
+
+          <div class="champ">
+            <label for="conf">Confirmer le mot de passe</label>
+            <input id="conf" type="password" formControlName="confirmation" placeholder="••••••••" autocomplete="new-password" />
+            @if (form.get('confirmation')?.touched && motDePasseInvalide) {
+              <span class="champ-erreur">Les mots de passe ne correspondent pas</span>
+            }
+          </div>
+
+          <button type="submit" class="btn-connexion" [disabled]="form.invalid || motDePasseInvalide || enCours()">
+            {{ enCours() ? 'Enregistrement…' : 'Enregistrer le mot de passe' }}
+          </button>
+        </form>
+      }
+    </div>
+  </div>
+</div>

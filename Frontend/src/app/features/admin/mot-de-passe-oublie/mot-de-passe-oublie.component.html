@@ -1,0 +1,38 @@
+<div class="reset-page">
+  <div class="reset-carte">
+    <div class="reset-entete">
+      <span class="reset-titre">Thème et Variations</span>
+      <span class="reset-sous-titre">Réinitialisation du mot de passe</span>
+    </div>
+
+    <div class="reset-corps">
+      @if (confirme()) {
+        <div class="alerte-succes">
+          <p>Si cet email est associé à un compte, vous recevrez un lien de réinitialisation dans quelques minutes.</p>
+          <p>Pensez à vérifier vos spams.</p>
+        </div>
+        <a routerLink="/login" class="lien-retour">← Retour à la connexion</a>
+      } @else {
+        <h1>Mot de passe oublié</h1>
+        <p class="instructions">Entrez votre adresse email et nous vous enverrons un lien pour réinitialiser votre mot de passe.</p>
+
+        @if (erreur()) {
+          <div class="alerte-erreur">{{ erreur() }}</div>
+        }
+
+        <form (ngSubmit)="onSubmit()">
+          <div class="champ">
+            <label for="email">Adresse email</label>
+            <input id="email" type="email" [formControl]="emailControl" placeholder="admin@exemple.fr" autocomplete="email" />
+          </div>
+
+          <button type="submit" class="btn-connexion" [disabled]="emailControl.invalid || enCours()">
+            {{ enCours() ? 'Envoi en cours…' : 'Envoyer le lien' }}
+          </button>
+        </form>
+
+        <a routerLink="/login" class="lien-retour">← Retour à la connexion</a>
+      }
+    </div>
+  </div>
+</div>

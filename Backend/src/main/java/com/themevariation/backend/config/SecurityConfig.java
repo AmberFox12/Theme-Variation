@@ -39,6 +39,8 @@ public class SecurityConfig {
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/auth/mot-de-passe-oublie").permitAll()
+                .requestMatchers("/api/auth/reinitialiser-mot-de-passe").permitAll()
                 .requestMatchers(HttpMethod.POST, "/api/inscriptions/publique").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/cours").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/historique", "/api/historique/page").permitAll()

@@ -30,6 +30,14 @@ export class AuthService {
     );
   }
 
+  demanderReset(email: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/mot-de-passe-oublie`, { email });
+  }
+
+  reinitialiserMotDePasse(token: string, nouveauMotDePasse: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/reinitialiser-mot-de-passe`, { token, nouveauMotDePasse });
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.estConnecte.set(false);

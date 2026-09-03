@@ -3,6 +3,9 @@
 # Secrets — ne jamais committer
 .env
 
+# Infos serveur — local uniquement
+SERVEUR.md
+
 # Fichiers sources favicon (copiés dans Frontend/public/)
 favicon*.png
 favicon*.ico

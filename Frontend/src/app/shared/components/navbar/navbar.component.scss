@@ -60,3 +60,71 @@ $gris-navbar: #5C5C5C;
     &:hover { color: white; }
   }
 }
+
+/* ── Hamburger (caché sur desktop) ── */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  span {
+    display: block;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+  }
+
+  &--ouvert {
+    span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  }
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .navbar {
+    justify-content: flex-end;
+    padding: 0 1.25rem;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-links {
+    display: none;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: $gris-navbar;
+    flex-direction: column;
+    gap: 0;
+    padding: 0.5rem 0 1rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+
+    &--ouvert {
+      display: flex;
+    }
+
+    li { width: 100%; }
+
+    a, .lien-action {
+      display: block;
+      padding: 0.85rem 1.5rem;
+      font-size: 1rem;
+    }
+  }
+
+  .navbar--hero .navbar-links {
+    background-color: rgba(30, 30, 30, 0.95);
+  }
+}

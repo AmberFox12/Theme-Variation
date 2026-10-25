@@ -1,5 +1,11 @@
 <nav class="navbar" [class.navbar--hero]="estPageGradient() && !estDefilee()">
-  <ul class="navbar-links">
+  <button class="hamburger" (click)="toggleMenu()" [class.hamburger--ouvert]="menuOuvert()" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <ul class="navbar-links" [class.navbar-links--ouvert]="menuOuvert()">
     <li>
       <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
         Accueil

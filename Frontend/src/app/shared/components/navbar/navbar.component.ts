@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, Router, NavigationEnd } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, map, fromEvent } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 
@@ -15,6 +15,8 @@ const PAGES_GRADIENT = ['/', '/archives', '/inscription', '/contact'];
 export class NavbarComponent {
   authService = inject(AuthService);
   private router = inject(Router);
+
+  menuOuvert = signal<boolean>(false);
 
   estPageGradient = toSignal(
     this.router.events.pipe(
@@ -31,7 +33,17 @@ export class NavbarComponent {
     { initialValue: false }
   );
 
+  private readonly _closeOnNav = this.router.events.pipe(
+    filter(e => e instanceof NavigationEnd),
+    takeUntilDestroyed()
+  ).subscribe(() => this.menuOuvert.set(false));
+
+  toggleMenu(): void {
+    this.menuOuvert.update(v => !v);
+  }
+
   logout(): void {
+    this.menuOuvert.set(false);
     this.authService.logout();
     this.router.navigate(['/']);
   }

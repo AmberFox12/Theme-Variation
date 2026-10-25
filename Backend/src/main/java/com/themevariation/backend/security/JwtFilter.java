@@ -52,6 +52,10 @@ public class JwtFilter extends OncePerRequestFilter {
                         );
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                // Token glissant : on émet un nouveau token à chaque requête authentifiée
+                String nouveauToken = jwtUtil.generateToken(email, role);
+                response.setHeader("X-Refresh-Token", nouveauToken);
             }
         }
 

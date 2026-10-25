@@ -38,6 +38,12 @@ export class AuthService {
     return this.http.post<void>(`${this.apiUrl}/reinitialiser-mot-de-passe`, { token, nouveauMotDePasse });
   }
 
+  updateToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+    this.role.set(this.extraireRole());
+    this.email.set(this.extraireEmail());
+  }
+
   logout(): void {
     localStorage.removeItem(this.tokenKey);
     this.estConnecte.set(false);

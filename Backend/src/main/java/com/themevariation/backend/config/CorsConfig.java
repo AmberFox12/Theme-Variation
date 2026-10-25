@@ -16,6 +16,7 @@ public class CorsConfig {
         config.setAllowedOrigins(List.of("http://localhost:4200", "https://themeetvariations.fr"));
         config.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("X-Refresh-Token"));
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -12,6 +12,7 @@ import { Evenement } from '../../core/models/evenement.model';
 })
 export class HomeComponent implements OnInit {
   prochainEvenement = signal<Evenement | null>(null);
+  evenementEnCours  = signal<Evenement | null>(null);
 
   constructor(private agendaService: AgendaService) {}
 
@@ -22,6 +23,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.agendaService.getProchainEvenement().subscribe({
       next: data => this.prochainEvenement.set(data),
+      error: () => {}
+    });
+    this.agendaService.getEvenementEnCours().subscribe({
+      next: data => this.evenementEnCours.set(data),
       error: () => {}
     });
   }

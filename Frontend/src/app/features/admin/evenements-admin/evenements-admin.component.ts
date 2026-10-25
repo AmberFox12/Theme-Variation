@@ -1,8 +1,8 @@
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { AgendaService, EvenementRequest } from '../../../core/services/agenda.service';
+import { switchMap, of } from 'rxjs';
+import { AgendaService } from '../../../core/services/agenda.service';
 import { Evenement } from '../../../core/models/evenement.model';
 
 @Component({
@@ -14,17 +14,24 @@ import { Evenement } from '../../../core/models/evenement.model';
 export class EvenementsAdminComponent implements OnInit {
 
   evenements = signal<Evenement[]>([]);
-  panneauOuvert = signal<boolean>(false);
+  panneauOuvert = signal(false);
   evenementEnEdition = signal<Evenement | null>(null);
 
+  typeDate = signal<'date' | 'periode'>('date');
+
+  imageFile = signal<File | null>(null);
+  imagePreview = signal<string | null>(null);
+  imageErreur = signal<string | null>(null);
+
   form = new FormGroup({
-    titre: new FormControl('', Validators.required),
+    titre:       new FormControl('', Validators.required),
     description: new FormControl(''),
-    dateHeure: new FormControl('', Validators.required),
-    lieu: new FormControl('', Validators.required),
+    dateHeure:   new FormControl(''),
+    dateDebut:   new FormControl(''),
+    dateFin:     new FormControl(''),
+    lieu:        new FormControl('', Validators.required),
   });
 
-  formStatus = toSignal(this.form.statusChanges, { initialValue: this.form.status });
   labelBouton = computed(() => this.evenementEnEdition() ? 'Enregistrer' : 'Créer');
 
   constructor(private agendaService: AgendaService) {}
@@ -43,17 +50,28 @@ export class EvenementsAdminComponent implements OnInit {
 
   ouvrirCreation(): void {
     this.evenementEnEdition.set(null);
-    this.form.reset({ titre: '', description: '', dateHeure: '', lieu: '' });
+    this.typeDate.set('date');
+    this.imageFile.set(null);
+    this.imagePreview.set(null);
+    this.imageErreur.set(null);
+    this.form.reset({ titre: '', description: '', dateHeure: '', dateDebut: '', dateFin: '', lieu: '' });
     this.panneauOuvert.set(true);
   }
 
   ouvrirEdition(evenement: Evenement): void {
     this.evenementEnEdition.set(evenement);
+    const estPeriode = !!evenement.dateFin;
+    this.typeDate.set(estPeriode ? 'periode' : 'date');
+    this.imageFile.set(null);
+    this.imagePreview.set(evenement.imageUrl ?? null);
+    this.imageErreur.set(null);
     this.form.reset({
-      titre: evenement.titre,
+      titre:       evenement.titre,
       description: evenement.description,
-      dateHeure: evenement.dateHeure.slice(0, 16),
-      lieu: evenement.lieu,
+      dateHeure:   estPeriode ? '' : evenement.dateHeure.slice(0, 16),
+      dateDebut:   estPeriode ? evenement.dateHeure.slice(0, 10) : '',
+      dateFin:     estPeriode ? evenement.dateFin!.slice(0, 10) : '',
+      lieu:        evenement.lieu,
     });
     this.panneauOuvert.set(true);
   }
@@ -62,21 +80,56 @@ export class EvenementsAdminComponent implements OnInit {
     this.panneauOuvert.set(false);
   }
 
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0] ?? null;
+    if (file && file.size > 5 * 1024 * 1024) {
+      this.imageErreur.set('Le fichier est trop volumineux (max 5 Mo).');
+      this.imageFile.set(null);
+      input.value = '';
+      return;
+    }
+    this.imageErreur.set(null);
+    this.imageFile.set(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => this.imagePreview.set(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  }
+
+  get formulaireValide(): boolean {
+    if (this.form.get('titre')?.invalid || this.form.get('lieu')?.invalid) return false;
+    if (this.typeDate() === 'date') {
+      return !!this.form.get('dateHeure')?.value;
+    }
+    return !!this.form.get('dateDebut')?.value && !!this.form.get('dateFin')?.value;
+  }
+
   sauvegarder(): void {
-    if (this.form.invalid) return;
+    if (!this.formulaireValide) return;
     const v = this.form.value;
-    const request: EvenementRequest = {
-      titre: v.titre!,
+    const file = this.imageFile();
+
+    const request = {
+      titre:       v.titre!,
       description: v.description ?? '',
-      dateHeure: v.dateHeure!,
-      lieu: v.lieu!,
+      dateHeure:   this.typeDate() === 'date' ? v.dateHeure! : v.dateDebut!,
+      dateFin:     this.typeDate() === 'periode' ? v.dateFin! : undefined,
+      lieu:        v.lieu!,
     };
+
     const enEdition = this.evenementEnEdition();
     const appel = enEdition
       ? this.agendaService.modifier(enEdition.id, request)
       : this.agendaService.creer(request);
 
-    appel.subscribe(() => {
+    appel.pipe(
+      switchMap(evenement => file
+        ? this.agendaService.uploaderImage(evenement.id, file)
+        : of(evenement)
+      )
+    ).subscribe(() => {
       this.chargerEvenements();
       this.fermerPanneau();
     });
@@ -90,7 +143,20 @@ export class EvenementsAdminComponent implements OnInit {
     });
   }
 
-  estPasse(dateHeure: string): boolean {
-    return new Date(dateHeure) < new Date();
+  estPasse(e: Evenement): boolean {
+    const ref = e.dateFin ?? e.dateHeure;
+    return new Date(ref) < new Date();
+  }
+
+  estEnCours(e: Evenement): boolean {
+    if (!e.dateFin) return false;
+    const now = new Date();
+    return new Date(e.dateHeure) <= now && new Date(e.dateFin) >= now;
+  }
+
+  labelStatut(e: Evenement): string {
+    if (this.estEnCours(e)) return 'En cours';
+    if (this.estPasse(e)) return 'Passé';
+    return 'À venir';
   }
 }

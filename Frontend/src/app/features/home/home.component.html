@@ -78,24 +78,60 @@
   </div>
 </section>
 
-<!-- PROCHAIN ÉVÉNEMENT -->
+<!-- ÉVÉNEMENTS -->
+@if (evenementEnCours() || prochainEvenement()) {
 <section class="section evenement">
   <div class="container">
-    <p class="section-surtitre">À venir</p>
-    <h2 class="section-titre">Prochain événement</h2>
+    <div class="evenements-grille"
+         [class.double]="evenementEnCours() && prochainEvenement()">
 
-    @if (prochainEvenement()) {
-      <div class="evenement-carte">
-        <h3>{{ prochainEvenement()!.titre }}</h3>
-        <p class="evenement-date">{{ prochainEvenement()!.dateHeure | date:'EEEE d MMMM yyyy à HH:mm' }}</p>
-        <p class="evenement-lieu"><strong>Lieu :</strong> {{ prochainEvenement()!.lieu }}</p>
-        <p class="evenement-desc">{{ prochainEvenement()!.description }}</p>
-      </div>
-    } @else {
-      <p class="evenement-vide">Aucun événement à venir pour le moment — revenez bientôt !</p>
-    }
+      <!-- Événement en cours (période) -->
+      @if (evenementEnCours()) {
+        <div class="evenement-carte en-cours">
+          @if (evenementEnCours()!.imageUrl) {
+            <img class="evenement-image" [src]="evenementEnCours()!.imageUrl!" [alt]="evenementEnCours()!.titre" />
+          }
+          <div class="evenement-corps">
+            <span class="evenement-badge badge-en-cours">En ce moment</span>
+            <h3>{{ evenementEnCours()!.titre }}</h3>
+            <p class="evenement-date">
+              Du {{ evenementEnCours()!.dateHeure | date:'d MMMM' }}
+              au {{ evenementEnCours()!.dateFin! | date:'d MMMM yyyy' }}
+            </p>
+            @if (evenementEnCours()!.lieu) {
+              <p class="evenement-lieu">📍 {{ evenementEnCours()!.lieu }}</p>
+            }
+            @if (evenementEnCours()!.description) {
+              <p class="evenement-desc">{{ evenementEnCours()!.description }}</p>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Prochain événement (date précise) -->
+      @if (prochainEvenement()) {
+        <div class="evenement-carte prochain">
+          @if (prochainEvenement()!.imageUrl) {
+            <img class="evenement-image" [src]="prochainEvenement()!.imageUrl!" [alt]="prochainEvenement()!.titre" />
+          }
+          <div class="evenement-corps">
+            <span class="evenement-badge badge-prochain">À venir</span>
+            <h3>{{ prochainEvenement()!.titre }}</h3>
+            <p class="evenement-date">📅 {{ prochainEvenement()!.dateHeure | date:'EEEE d MMMM yyyy à HH:mm' }}</p>
+            @if (prochainEvenement()!.lieu) {
+              <p class="evenement-lieu">📍 {{ prochainEvenement()!.lieu }}</p>
+            }
+            @if (prochainEvenement()!.description) {
+              <p class="evenement-desc">{{ prochainEvenement()!.description }}</p>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
   </div>
 </section>
+}
 
 <!-- LA PROFESSEURE -->
 <section class="section professeure">

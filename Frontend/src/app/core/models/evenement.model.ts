@@ -3,5 +3,7 @@ export interface Evenement {
     titre: string;
     description: string;
     dateHeure: string;
+    dateFin?: string;
     lieu: string;
+    imageUrl?: string;
 }

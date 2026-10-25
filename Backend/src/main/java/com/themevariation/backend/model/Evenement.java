@@ -22,13 +22,18 @@ public class Evenement {
 
     @Column(nullable = false)
     private String titre;
-    
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateHeure;
 
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateFin;
+
     @Column(nullable = false)
     private String lieu;
+
+    private String imageUrl;
 }

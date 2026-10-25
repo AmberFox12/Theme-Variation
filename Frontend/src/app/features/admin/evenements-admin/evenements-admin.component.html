@@ -12,13 +12,20 @@
         <p class="vide">Aucun événement enregistré.</p>
       }
       @for (e of evenements(); track e.id) {
-        <div class="carte" [class.passe]="estPasse(e.dateHeure)">
+        <div class="carte" [class.passe]="estPasse(e)" [class.en-cours]="estEnCours(e)">
+          @if (e.imageUrl) {
+            <img class="carte-image" [src]="e.imageUrl" [alt]="e.titre" />
+          }
           <div class="carte-info">
-            <span class="badge" [class.badge-passe]="estPasse(e.dateHeure)">
-              {{ estPasse(e.dateHeure) ? 'Passé' : 'À venir' }}
+            <span class="badge"
+              [class.badge-en-cours]="estEnCours(e)"
+              [class.badge-passe]="estPasse(e) && !estEnCours(e)">
+              {{ labelStatut(e) }}
             </span>
             <h2>{{ e.titre || '(sans titre)' }}</h2>
-            @if (e.dateHeure) {
+            @if (e.dateFin) {
+              <p class="date">📅 Du {{ e.dateHeure | date:'d MMM yyyy' }} au {{ e.dateFin | date:'d MMM yyyy' }}</p>
+            } @else if (e.dateHeure) {
               <p class="date">📅 {{ e.dateHeure | date:'dd/MM/yyyy à HH:mm' }}</p>
             }
             @if (e.lieu) {
@@ -39,21 +46,44 @@
     @if (panneauOuvert()) {
       <div class="panneau">
         <div class="panneau-entete">
-          <h2>{{ labelBouton() === 'Enregistrer' ? 'Modifier l\'événement' : 'Nouvel événement' }}</h2>
+          <h2>{{ evenementEnEdition() ? 'Modifier l\'événement' : 'Nouvel événement' }}</h2>
           <button class="btn-fermer" (click)="fermerPanneau()">✕</button>
         </div>
 
         <form [formGroup]="form" (ngSubmit)="sauvegarder()" class="formulaire">
 
-          <label>Titre
+          <label>Titre *
             <input type="text" formControlName="titre" placeholder="ex : Spectacle de fin d'année" />
           </label>
 
-          <label>Date et heure
-            <input type="datetime-local" formControlName="dateHeure" />
-          </label>
+          <!-- Sélecteur type de date -->
+          <div class="type-date-toggle">
+            <button type="button"
+              class="toggle-btn" [class.actif]="typeDate() === 'date'"
+              (click)="typeDate.set('date')">
+              Date précise
+            </button>
+            <button type="button"
+              class="toggle-btn" [class.actif]="typeDate() === 'periode'"
+              (click)="typeDate.set('periode')">
+              Période
+            </button>
+          </div>
 
-          <label>Lieu
+          @if (typeDate() === 'date') {
+            <label>Date et heure *
+              <input type="datetime-local" formControlName="dateHeure" />
+            </label>
+          } @else {
+            <label>Date de début *
+              <input type="date" formControlName="dateDebut" />
+            </label>
+            <label>Date de fin *
+              <input type="date" formControlName="dateFin" />
+            </label>
+          }
+
+          <label>Lieu *
             <input type="text" formControlName="lieu" placeholder="ex : Salle des fêtes de Verneuil" />
           </label>
 
@@ -61,9 +91,26 @@
             <textarea formControlName="description" rows="4" placeholder="Informations supplémentaires..."></textarea>
           </label>
 
+          <!-- Image -->
+          <div class="champ-image">
+            <span class="champ-image-label">Image (affiche ou photo)</span>
+            @if (imagePreview()) {
+              <img class="image-preview" [src]="imagePreview()!" alt="Aperçu" />
+            }
+            <label class="btn-upload">
+              {{ imagePreview() ? 'Changer l\'image' : 'Choisir une image' }}
+              <input type="file" accept="image/*" (change)="onImageChange($event)" hidden />
+            </label>
+            @if (imageErreur()) {
+              <span class="image-erreur">{{ imageErreur() }}</span>
+            } @else {
+              <span class="image-hint">JPG, PNG ou WebP — max 5 Mo</span>
+            }
+          </div>
+
           <div class="panneau-actions">
             <button type="button" class="btn-secondaire" (click)="fermerPanneau()">Annuler</button>
-            <button type="submit" class="btn-primaire" [disabled]="formStatus() !== 'VALID'">
+            <button type="submit" class="btn-primaire" [disabled]="!formulaireValide">
               {{ labelBouton() }}
             </button>
           </div>

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +33,13 @@ public class AgendaController {
                 .orElse(ResponseEntity.noContent().build());
     }
 
+    @GetMapping("/en-cours")
+    public ResponseEntity<Evenement> getEvenementEnCours() {
+        return agendaService.getEvenementEnCours()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.noContent().build());
+    }
+
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Evenement> creer(@Valid @RequestBody EvenementDto dto) {
@@ -42,6 +50,13 @@ public class AgendaController {
     @PutMapping("/{id}")
     public ResponseEntity<Evenement> modifier(@PathVariable Long id, @Valid @RequestBody EvenementDto dto) {
         return ResponseEntity.ok(agendaService.modifier(id, dto));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/image")
+    public ResponseEntity<Evenement> uploadImage(@PathVariable Long id,
+                                                  @RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok(agendaService.uploadImage(id, file));
     }
 
     @PreAuthorize("hasRole('ADMIN')")

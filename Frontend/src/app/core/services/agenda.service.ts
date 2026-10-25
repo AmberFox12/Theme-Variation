@@ -7,6 +7,7 @@ export interface EvenementRequest {
   titre: string;
   description: string;
   dateHeure: string;
+  dateFin?: string;
   lieu: string;
 }
 
@@ -26,12 +27,24 @@ export class AgendaService {
     );
   }
 
+  getEvenementEnCours(): Observable<Evenement | null> {
+    return this.http.get<Evenement>(`${this.apiUrl}/en-cours`, { observe: 'response' }).pipe(
+      map(response => response.status === 204 ? null : response.body)
+    );
+  }
+
   creer(request: EvenementRequest): Observable<Evenement> {
     return this.http.post<Evenement>(this.apiUrl, request);
   }
 
   modifier(id: number, request: EvenementRequest): Observable<Evenement> {
     return this.http.put<Evenement>(`${this.apiUrl}/${id}`, request);
+  }
+
+  uploaderImage(id: number, file: File): Observable<Evenement> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post<Evenement>(`${this.apiUrl}/${id}/image`, formData);
   }
 
   supprimer(id: number): Observable<void> {

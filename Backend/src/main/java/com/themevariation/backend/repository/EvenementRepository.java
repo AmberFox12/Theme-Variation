@@ -9,6 +9,9 @@ import java.util.List;
 
 public interface EvenementRepository extends JpaRepository<Evenement, Long> {
 
-    @Query("SELECT e FROM Evenement e WHERE e.dateHeure > :maintenant ORDER BY e.dateHeure ASC LIMIT 1")
+    @Query("SELECT e FROM Evenement e WHERE e.dateFin IS NULL AND e.dateHeure > :maintenant ORDER BY e.dateHeure ASC LIMIT 1")
     List<Evenement> findProchainEvenement(LocalDateTime maintenant);
+
+    @Query("SELECT e FROM Evenement e WHERE e.dateFin IS NOT NULL AND e.dateHeure <= :maintenant AND e.dateFin >= :maintenant ORDER BY e.dateHeure ASC LIMIT 1")
+    List<Evenement> findEvenementEnCours(LocalDateTime maintenant);
 }

@@ -6,6 +6,10 @@
 # Infos serveur — local uniquement
 SERVEUR.md
 
+# Overrides Docker locaux
+Caddyfile.local
+docker-compose.override.yml
+
 # Fichiers sources favicon (copiés dans Frontend/public/)
 favicon*.png
 favicon*.ico

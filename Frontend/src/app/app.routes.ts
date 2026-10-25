@@ -15,6 +15,7 @@ import { ParametresAdminComponent } from './features/admin/parametres-admin/para
 import { UtilisateursAdminComponent } from './features/admin/utilisateurs-admin/utilisateurs-admin.component';
 import { MotDePasseOublieComponent } from './features/admin/mot-de-passe-oublie/mot-de-passe-oublie.component';
 import { ReinitialiserMotDePasseComponent } from './features/admin/reinitialiser-mot-de-passe/reinitialiser-mot-de-passe.component';
+import { MentionsLegalesComponent } from './features/mentions-legales/mentions-legales.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent},
@@ -25,6 +26,7 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent},
     { path: 'mot-de-passe-oublie', component: MotDePasseOublieComponent },
     { path: 'reinitialiser-mot-de-passe', component: ReinitialiserMotDePasseComponent },
+    { path: 'mentions-legales', component: MentionsLegalesComponent },
     {
         path: 'admin',
         component: AdminComponent,

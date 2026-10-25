@@ -67,3 +67,9 @@
   font-size: 0.78rem;
   opacity: 0.45;
 }
+
+.footer-lien-legal {
+  color: inherit;
+  text-decoration: none;
+  &:hover { text-decoration: underline; }
+}

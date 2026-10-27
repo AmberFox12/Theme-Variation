@@ -28,4 +28,7 @@ public class Parametre {
 
     @Column(columnDefinition = "TEXT")
     private String carteEmbedUrl;
+
+    private String representantLegal;
+    private String numeroRNA;
 }

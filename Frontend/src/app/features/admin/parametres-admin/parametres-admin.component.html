@@ -38,6 +38,21 @@
       <span class="aide-champ">Sur Google Maps : Partager → Intégrer une carte → cliquer "Copier le contenu HTML". Vous pouvez coller le code complet ici, l'URL sera extraite automatiquement.</span>
     </label>
 
+    <hr class="separateur" />
+    <h3>Mentions légales</h3>
+    <p class="aide">Ces informations apparaissent sur la page Mentions légales.</p>
+
+    <label>
+      Représentant légal (nom et prénom)
+      <input type="text" formControlName="representantLegal" placeholder="Prénom NOM" />
+    </label>
+
+    <label>
+      Numéro RNA
+      <input type="text" formControlName="numeroRNA" placeholder="W123456789" />
+      <span class="aide-champ">Numéro d'enregistrement de l'association (Répertoire National des Associations).</span>
+    </label>
+
     <div class="actions">
       <button type="submit" class="btn-sauvegarder">Enregistrer</button>
       @if (sauvegarde() === 'ok') {

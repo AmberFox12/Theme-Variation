@@ -8,13 +8,16 @@
       <h1>Mentions légales</h1>
 
       <h2>Éditeur du site</h2>
-      <p>
-        <strong>Association Thème et Variations</strong><br>
-        338, route de Francheville<br>
-        27130 Verneuil d'Avre et d'Iton<br>
-        Email : <a href="mailto:association.themeetvariations@gmail.com">association.themeetvariations@gmail.com</a><br>
-        Représentant légal : [Prénom NOM]<br>
-        Numéro RNA : [à compléter après déclaration en préfecture]
+      <p style="white-space: pre-line">
+        <strong>Association Thème et Variations</strong>
+        {{ parametres()?.adresse }}
+        Email : <a [href]="'mailto:' + parametres()?.email">{{ parametres()?.email }}</a>
+        @if (parametres()?.representantLegal) {
+          Représentant légal : {{ parametres()?.representantLegal }}
+        }
+        @if (parametres()?.numeroRNA) {
+          Numéro RNA : {{ parametres()?.numeroRNA }}
+        }
       </p>
 
       <h2>Hébergement</h2>
@@ -94,7 +97,7 @@
       </ul>
       <p>
         Pour exercer ces droits, contactez-nous à :
-        <a href="mailto:association.themeetvariations@gmail.com">association.themeetvariations@gmail.com</a>
+        <a [href]="'mailto:' + parametres()?.email">{{ parametres()?.email }}</a>
       </p>
       <p>
         Nous nous engageons à répondre dans un délai d'un mois. En cas de réponse insatisfaisante,

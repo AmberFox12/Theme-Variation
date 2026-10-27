@@ -19,6 +19,8 @@ export class ParametresAdminComponent implements OnInit {
     facebook:          new FormControl(''),
     emailNotification: new FormControl(''),
     carteEmbedUrl:     new FormControl(''),
+    representantLegal: new FormControl(''),
+    numeroRNA:         new FormControl(''),
   });
 
   constructor(private parametreService: ParametreService) {}
@@ -33,6 +35,8 @@ export class ParametresAdminComponent implements OnInit {
         facebook:          p.facebook ?? '',
         emailNotification: p.emailNotification ?? '',
         carteEmbedUrl:     p.carteEmbedUrl ?? '',
+        representantLegal: p.representantLegal ?? '',
+        numeroRNA:         p.numeroRNA ?? '',
       });
     });
   }
@@ -48,6 +52,8 @@ export class ParametresAdminComponent implements OnInit {
       facebook:          v.facebook || null,
       emailNotification: v.emailNotification || null,
       carteEmbedUrl:     v.carteEmbedUrl || null,
+      representantLegal: v.representantLegal || null,
+      numeroRNA:         v.numeroRNA || null,
     }).subscribe({
       next: () => { this.sauvegarde.set('ok'); setTimeout(() => this.sauvegarde.set('idle'), 3000); },
       error: () => this.sauvegarde.set('erreur'),

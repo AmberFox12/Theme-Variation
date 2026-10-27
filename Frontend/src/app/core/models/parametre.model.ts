@@ -7,4 +7,6 @@ export interface Parametre {
   facebook: string | null;
   emailNotification: string | null;
   carteEmbedUrl: string | null;
+  representantLegal: string | null;
+  numeroRNA: string | null;
 }

@@ -45,6 +45,8 @@ public class ParametreService {
         p.setFacebook(request.getFacebook());
         p.setEmailNotification(request.getEmailNotification());
         p.setCarteEmbedUrl(validerCarteEmbedUrl(request.getCarteEmbedUrl()));
+        p.setRepresentantLegal(request.getRepresentantLegal());
+        p.setNumeroRNA(request.getNumeroRNA());
         return parametreRepository.save(p);
     }
 
